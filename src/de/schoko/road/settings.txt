@@ -1,0 +1,6 @@
+name: Player
+quality: normal
+showNames: true
+showFrames: false
+ip: 127.0.0.1
+port: 5555
