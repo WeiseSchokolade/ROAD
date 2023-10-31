@@ -63,5 +63,15 @@
 		<artifactId>RRSWJ</artifactId>
 		<version>61442bb</version>
 	</dependency>
+	<dependency>
+		<groupId>com.github.WeiseSchokolade</groupId>
+		<artifactId>saving</artifactId>
+		<version>28d19d4</version>
+	</dependency>
+	<dependency>
+		<groupId>com.github.WeiseSchokolade</groupId>
+		<artifactId>ServerBase</artifactId>
+		<version>136bfc6</version>
+	</dependency>
   </dependencies>
 </project>
