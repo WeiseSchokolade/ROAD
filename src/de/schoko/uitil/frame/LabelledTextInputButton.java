@@ -26,13 +26,16 @@ public class LabelledTextInputButton extends Button {
 		textInputBox.setY(this.getY());
 		
 		hud.drawText(label, getX(), getY() + textInputBox.getFont().getSize(), Color.WHITE, textInputBox.getFont());
-		hud.draw(textInputBox);
+		// TODO: Make this line work
+		//hud.draw(textInputBox);
 	}
 	
 	public void construct() {
 		if (constructed) return;
 		constructed = true;
-		this.textInputBox = new TextInputBox(getContext(), getX(), getY(), defaultText, 30);
+		// TODO: Make this line work
+		System.out.println("LabelledTextInputButton not working atm. DefaultText: " + defaultText);
+		//this.textInputBox = new TextInputBox(getContext(), getX(), getY(), defaultText, 30);
 		this.labelWidth = Graph.getStringWidth(label, this.textInputBox.getFont());
 		this.textInputBox.setX(getX() + labelWidth + 5);
 	}

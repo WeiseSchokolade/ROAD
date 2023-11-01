@@ -7,6 +7,7 @@ import de.schoko.rendering.Context;
 import de.schoko.rendering.Graph;
 import de.schoko.rendering.HUDGraph;
 import de.schoko.rendering.TextAlignment;
+import de.schoko.rendering.panels.PanelSystem;
 import de.schoko.road.multiplayer.MultiPlayerMenu;
 import de.schoko.saving.config.ResourceLocation;
 import de.schoko.uitil.TextInputBox;
@@ -20,7 +21,16 @@ public class MainMenu extends Menu {
 	private TextInputBox nameInput;
 	
 	@Override
+	public void onChange() {
+		getContext().getPanelSystem().clear();
+	}
+	
+	@Override
 	public void onLoad(Context context) {
+		PanelSystem panelSystem = context.getPanelSystem();
+		nameInput = new TextInputBox(0, 0, Constants.PLAYER_NAME, 30);
+		panelSystem.add(nameInput);
+		
 		context.getSettings().setRenderCoordinateSystem(false);
 		context.getSettings().setBackgroundColor(Constants.MAIN_MENU_BACKGROUND_COLOR);
 		singlePlayerButton = new TextButton(context, "Singleplayer", 0, 0, Color.RED, Constants.MAIN_MENU_FONT,
@@ -29,7 +39,6 @@ public class MainMenu extends Menu {
 				Constants.MAIN_MENU_BACKGROUND_COLOR, Constants.MAIN_MENU_BACKGROUND_COLOR, Color.WHITE, Color.LIGHT_GRAY);
 		settingsButton = new TextButton(context, "Settings", 30, 30, Color.RED, Constants.MAIN_MENU_FONT,
 				Constants.MAIN_MENU_BACKGROUND_COLOR, Constants.MAIN_MENU_BACKGROUND_COLOR, Color.WHITE, Color.LIGHT_GRAY);
-		nameInput = new TextInputBox(context, 0, 0, Constants.PLAYER_NAME, 30);
 	}
 	
 	@Override
@@ -77,6 +86,5 @@ public class MainMenu extends Menu {
 		
 		nameInput.setX((int) (hud.getWidth() / 2) - nameInput.getWidth() / 2);
 		nameInput.setY((int) (hud.getHeight() / 3));
-		hud.draw(nameInput);
 	}
 }

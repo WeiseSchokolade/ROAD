@@ -8,6 +8,7 @@ import de.schoko.rendering.Graph;
 import de.schoko.rendering.HUDGraph;
 import de.schoko.rendering.Keyboard;
 import de.schoko.rendering.TextAlignment;
+import de.schoko.rendering.panels.PanelSystem;
 import de.schoko.saving.config.Config;
 import de.schoko.saving.config.ResourceLocation;
 import de.schoko.uitil.InputBox;
@@ -24,11 +25,14 @@ public class SettingsMenu extends Menu {
 	private TextButton showNamesButton;
 	private TextButton showFramesButton;
 	private TextButton exitButton;
-	private TextInputBox ipInputField;
-	private IntInputBox portInputField;
 	
 	public SettingsMenu(Menu previousMenu) {
 		this.previousMenu = previousMenu;
+	}
+	
+	@Override
+	public void onChange() {
+		getContext().getPanelSystem().clear();
 	}
 	
 	@Override
@@ -36,6 +40,18 @@ public class SettingsMenu extends Menu {
 		context.getSettings().setBackgroundColor(Constants.MAIN_MENU_BACKGROUND_COLOR);
 		context.getSettings().setAutoCam(false);
 		context.getSettings().setRenderCoordinateSystem(false);
+
+		Config settingsConfig = RoadProject.get().getSettingsConfig();
+		
+		PanelSystem panelSystem = context.getPanelSystem();
+		panelSystem.add(new TextInputBox(80, 280, Constants.SERVER_IP, 999, string -> {
+			Constants.SERVER_IP = string;
+			settingsConfig.set("ip", Constants.SERVER_IP);
+		}));
+		panelSystem.add(new IntInputBox(110, 320, Constants.SERVER_PORT, 1, 65536, i -> {
+			Constants.SERVER_PORT = i;
+			settingsConfig.set("port", String.valueOf(Constants.SERVER_PORT));
+		}));
 		
 		renderQualityButton = new TextButton(context, "Quality: " + Constants.RENDER_QUALITY.getName(), 30, 90, Color.RED, Constants.MAIN_MENU_FONT,
 				Constants.MAIN_MENU_BACKGROUND_COLOR, Constants.MAIN_MENU_BACKGROUND_COLOR, Color.WHITE, Color.LIGHT_GRAY);
@@ -45,8 +61,6 @@ public class SettingsMenu extends Menu {
 				Constants.MAIN_MENU_BACKGROUND_COLOR, Constants.MAIN_MENU_BACKGROUND_COLOR, Color.WHITE, Color.LIGHT_GRAY);
 		exitButton = new TextButton(context, "Close Settings", 30, 0, Color.RED, Constants.MAIN_MENU_FONT,
 				Constants.MAIN_MENU_BACKGROUND_COLOR, Constants.MAIN_MENU_BACKGROUND_COLOR, Color.WHITE, Color.LIGHT_GRAY);
-		ipInputField = new TextInputBox(context, 80, 280, Constants.SERVER_IP, 999);
-		portInputField = new IntInputBox(context, 110, 320, Constants.SERVER_PORT, 1, 65536);
 	}
 	
 	@Override
@@ -86,18 +100,6 @@ public class SettingsMenu extends Menu {
 			showFramesButton.setText("Show Frames: " + Constants.SHOW_FRAMES);
 			settingsConfig.set("showFrames", String.valueOf(Constants.SHOW_FRAMES));
 		}
-		
-		if (ipInputField.shouldApply()) {
-			Constants.SERVER_IP = ipInputField.getString();
-			ipInputField.setString(Constants.SERVER_IP);
-			settingsConfig.set("ip", Constants.SERVER_IP);
-		}
-		
-		if (portInputField.shouldApply()) {
-			Constants.SERVER_PORT = portInputField.getNum();
-			portInputField.setNum(Constants.SERVER_PORT);
-			settingsConfig.set("port", String.valueOf(Constants.SERVER_PORT));
-		}
 	}
 
 	@Override
@@ -116,8 +118,6 @@ public class SettingsMenu extends Menu {
 		hud.draw(exitButton);
 		
 		hud.drawText("IP:", 30, 305, Color.RED, Constants.MAIN_MENU_FONT, TextAlignment.LEFT);
-		hud.draw(ipInputField);
 		hud.drawText("Port:", 30, 345, Color.RED, Constants.MAIN_MENU_FONT, TextAlignment.LEFT);
-		hud.draw(portInputField);
 	}
 }

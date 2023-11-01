@@ -2,12 +2,13 @@ package de.schoko.uitil;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Graphics2D;
 
 import de.schoko.rendering.Context;
 import de.schoko.rendering.Graph;
+import de.schoko.rendering.HUDGraph;
 import de.schoko.rendering.Keyboard;
 import de.schoko.rendering.Mouse;
+import de.schoko.uitil.appliers.StringApplier;
 
 public class TextInputBox extends InputBox {
 	private static final int[] ENTERABLE_CHARACTERS = {
@@ -44,10 +45,13 @@ public class TextInputBox extends InputBox {
 	private int characterLimit;
 	private Font font;
 	private boolean apply;
+	private StringApplier applier;
 
-	public TextInputBox(Context context, int x, int y, String defaultString, int characterLimit) {
-		this.mouse = context.getMouse();
-		this.keyboard = context.getKeyboard();
+	public TextInputBox(int x, int y, String defaultString, int characterLimit) {
+		this(x, y, defaultString, characterLimit, null);
+	}
+	
+	public TextInputBox(int x, int y, String defaultString, int characterLimit, StringApplier applier) {
 		this.x = x;
 		this.y = y;
 		this.minWidth = 50;
@@ -55,12 +59,28 @@ public class TextInputBox extends InputBox {
 		this.string = defaultString;
 		this.characterLimit = characterLimit;
 		this.font = new Font("Segoe UI", Font.PLAIN, this.height);
+		this.applier = applier;
 	}
-
+	
 	@Override
-	public void call(Graphics2D g2D) {
+	public void load() {
+		Context context = getSystem().getContext();
+		this.mouse = context.getMouse();
+		this.keyboard = context.getKeyboard();
+	}
+	
+	@Override
+	protected void apply() {
+		apply = true;
+		if (applier != null) {
+			applier.apply(string);
+		}
+	}
+	
+	@Override
+	public void update() {
 		apply = false;
-		if (this == InputBox.selectedInputBox) {
+		if (isSelected()) {
 			for (int i = 0; i < ENTERABLE_CHARACTERS.length; i++) {
 				if (keyboard.wasRecentlyPressed(ENTERABLE_CHARACTERS[i])) {
 					if (RESULTING_CHARACTERS[i] == '/') {
@@ -76,29 +96,34 @@ public class TextInputBox extends InputBox {
 					}
 				}
 			}
-			if ((keyboard.wasRecentlyPressed(Keyboard.ESCAPE) || keyboard.wasRecentlyPressed(Keyboard.ENTER)) && this == InputBox.selectedInputBox) {
-				apply = true;
-				InputBox.selectedInputBox = null;
+			if ((keyboard.wasRecentlyPressed(Keyboard.ESCAPE) || keyboard.wasRecentlyPressed(Keyboard.ENTER)) && isSelected()) {
+				setSelectedInputBox(null);
+			}
+		}
+		
+		if (mouse.getScreenX() >= this.x - 2 && mouse.getScreenY() >= this.y - 2 && mouse.getScreenX() <= this.x + this.getWidth() + 4 && mouse.getScreenY() <= this.y + this.height + 14) {
+			if (mouse.isPressed(Mouse.LEFT_BUTTON)) {
+				setSelectedInputBox(this);
 			}
 		} else {
-			if (mouse.getScreenX() >= this.x && mouse.getScreenY() >= this.y && mouse.getScreenX() <= this.x + this.getWidth() && mouse.getScreenY() <= this.y + this.height) {
+			if (isSelected()) {
 				if (mouse.isPressed(Mouse.LEFT_BUTTON)) {
-					InputBox.selectedInputBox = this;
+					setSelectedInputBox(null);
 				}
 			}
 		}
-		g2D.setFont(font);
-		stringWidth = Graph.getStringWidth(string, font);
-		if (this == InputBox.selectedInputBox) {
-			g2D.setColor(Graph.getColor(0, 255, 217));
-			g2D.fillRect(x - 2, y - 2, getWidth() + 4, this.height + 14);
-		}
-		g2D.setColor(Color.WHITE);
-		g2D.fillRect(x, y, getWidth(), this.height + 10);
-		g2D.setColor(Color.BLACK);
-		g2D.drawString(string, x, y + font.getSize());
 	}
 	
+	@Override
+	public void draw(HUDGraph hud) {
+		stringWidth = Graph.getStringWidth(string, font);
+		if (isSelected()) {
+			hud.drawRect(x - 2, y - 2, getWidth() + 4, this.height + 14, Graph.getColor(0, 255, 217));
+		}
+		hud.drawRect(x, y, getWidth(), this.height + 10, Color.WHITE);
+		hud.drawText(string, x, y + font.getSize(), Color.BLACK, font);
+	}
+
 	public void setX(int x) {
 		this.x = x;
 	}
@@ -127,12 +152,8 @@ public class TextInputBox extends InputBox {
 		return string;
 	}
 
-	public boolean isSelected() {
-		return (InputBox.selectedInputBox == this);
-	}
-	
 	public void select() {
-		InputBox.selectedInputBox = this;
+		setSelectedInputBox(this);
 	}
 
 	public void setString(String string) {

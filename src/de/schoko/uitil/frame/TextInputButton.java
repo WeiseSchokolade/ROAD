@@ -19,13 +19,15 @@ public class TextInputButton extends Button {
 	public void draw(HUDGraph hud) {
 		if (!constructed) {
 			constructed = true;
-			this.textInputBox = new TextInputBox(getContext(), getX(), getY(), defaultText, characterLimit);
+			// TODO: Fix this
+			System.out.println("TextInputButton not working atm. DefaultText: " + defaultText + " CharacterLimit: " + characterLimit);
+			//this.textInputBox = new TextInputBox(getContext(), getX(), getY(), defaultText, characterLimit);
 		}
 		
 		textInputBox.setX(this.getX());
 		textInputBox.setY(this.getY());
 		
-		hud.draw(textInputBox);
+		//hud.draw(textInputBox);
 	}
 
 	public String getText() {
