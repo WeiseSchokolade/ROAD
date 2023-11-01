@@ -142,7 +142,6 @@ public class SingleGame extends Menu {
 	
 	@Override
 	public void render(Graph ge) {
-		ge.addDebugString("UnfinishedCarAmount: " + unfinishedCarAmount);
 		Graphics2D graphics = ge.getAWTGraphics();
 		//double turnAngle = Math.toRadians(playerCar.getDir().getAngle() - 90);
 		//graphics.rotate(turnAngle, ge.getViewport().getWidth() / 2, ge.getViewport().getHeight() / 2);
