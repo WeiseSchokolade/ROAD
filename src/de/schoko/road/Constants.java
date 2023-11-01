@@ -8,7 +8,7 @@ import de.schoko.rendering.Graph;
 public class Constants {
 	public static final int VERSION = 1;
 	public static boolean DEV_ACCESS = false;
-	public static String RESOURCE_PATH = "src/de/schoko/road/";
+	public static String RESOURCE_PATH = "de/schoko/road/";
 
 	public static Font MAIN_MENU_FONT = new Font("Verdana", Font.PLAIN, 30);
 	public static Font MAIN_MENU_FONT_BIG = new Font("Verdana", Font.PLAIN, 60);
