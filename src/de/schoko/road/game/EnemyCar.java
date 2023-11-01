@@ -27,15 +27,19 @@ public class EnemyCar extends Car {
 	
 	@Override
 	public void onLoad() {
-		Vector2D startDir = spline.getDerivative(currentT).normalize();
-		Vector2D spawnDir = spline.getPoint(currentT).subtract(getPos());
+		Vector2D splinePos = spline.getPoint(currentT);
+		Vector2D splineDir = spline.getDerivative(currentT);
+		
+		Vector2D startDir = splineDir.normalize();
+		Vector2D spawnDir = splinePos.subtract(getPos());
+		Vector2D splineNormal = splineDir.rotate(Math.toRadians(90));
+		
 		double dotProduct = startDir.dotProduct(spawnDir);
 		Vector2D move = startDir.multiply(-dotProduct);
 		Vector2D offsetVec = spawnDir.add(move);
-		targetOffset = -offsetVec.getLength();
+		targetOffset = -offsetVec.dotProduct(splineNormal);
 
-		Vector2D splineTarget = spline.getPoint(currentT);
-		target = splineTarget.add(spline.getDerivative(currentT).rotate(Math.toRadians(90)).normalize().multiply(targetOffset));
+		target = splinePos.add(splineDir.rotate(Math.toRadians(90)).normalize().multiply(targetOffset));
 		targetChangeTime = 2;
 	}
 	
@@ -57,6 +61,8 @@ public class EnemyCar extends Car {
 			targetOffsetChange = 0.6 * Math.random() - 0.3;
 		}
 		targetOffset = Math.max(Math.min(targetOffset + targetOffsetChange * deltaTime, Constants.ROAD_AI_WIDTH), -Constants.ROAD_AI_WIDTH);
+		Vector2D splineTarget = spline.getPoint(currentT);
+		target = splineTarget.add(spline.getDerivative(currentT).rotate(Math.toRadians(90)).normalize().multiply(targetOffset));
 		
 		Vector2D targetDir = target.subtract(getPos()).normalize();
 		setDir(targetDir);
