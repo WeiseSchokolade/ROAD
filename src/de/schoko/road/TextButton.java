@@ -1,5 +1,6 @@
 package de.schoko.road;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
@@ -64,9 +65,10 @@ public class TextButton extends DrawCall {
 		wasRecentlyPressed = pressed;
 		
 		// Draw
+		g2D.setStroke(new BasicStroke(5f));
+		
 		g2D.setColor(backgroundColor);
 		g2D.fillRect(x, y, width, height);
-		g2D.setColor(textColor);
 		
 		if (pressed) {
 			g2D.setColor(pressedOutlineColor);
