@@ -146,7 +146,7 @@ public class SingleGame extends Menu {
 		Graphics2D graphics = ge.getAWTGraphics();
 		//double turnAngle = Math.toRadians(playerCar.getDir().getAngle() - 90);
 		//graphics.rotate(turnAngle, ge.getViewport().getWidth() / 2, ge.getViewport().getHeight() / 2);
-		Graph g = new Graph(getContext().getWindow().getPanel(), graphics, getContext().getCamera(), getContext().getSettings(), getContext().getSettings().getGraphTransform());
+		Graph g = new Graph(getContext().getWindow().getPanel(), graphics, getContext().getCamera(), getContext().getSettings(), getContext().getSettings().getGraphTransform(), getContext().getPanelSystem());
 		HUDGraph hud = ge.getHUD();
 		
 		roadLayer.draw(g);

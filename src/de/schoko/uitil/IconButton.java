@@ -17,7 +17,7 @@ public class IconButton extends DrawCall {
 	private boolean enabled;
 	
 	public IconButton(de.schoko.rendering.Image image, Mouse mouse, double x, double y, double scale) {
-		this.image = image.getAWTImage();
+		this.image = image.getBufferedImage();
 		this.mouse = mouse;
 		this.x = (int) x;
 		this.y = (int) y;

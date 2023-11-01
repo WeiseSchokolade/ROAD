@@ -61,7 +61,7 @@
     <dependency>
 		<groupId>com.github.WeiseSchokolade</groupId>
 		<artifactId>RRSWJ</artifactId>
-		<version>61442bb</version>
+		<version>7ccf1b4</version>
 	</dependency>
 	<dependency>
 		<groupId>com.github.WeiseSchokolade</groupId>

@@ -45,7 +45,6 @@ public class RoadProject extends Renderer {
 		RendererSettings settings = window.getSettings();
 		
 		settings.setBackgroundColor(2, 148, 0);
-		settings.setDisplayStartedNotification(false);
 		Image image = new Image("icon", ImageLocation.JAR.getImage(Constants.RESOURCE_PATH + "car_yellow.png"));
 		settings.setWindowIcon(image);
 		settings.setMaximizedByDefault(true);

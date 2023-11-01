@@ -18,8 +18,8 @@ public class SpritesheetFrame extends Shape {
 		this.columns = columns;
 		this.rows = rows;
 		this.scale = scale;
-		this.imageWidth = (int) (image.getAWTImage().getWidth(null));
-		this.imageHeight = (int) (image.getAWTImage().getHeight(null));
+		this.imageWidth = (int) (image.getWidth());
+		this.imageHeight = (int) (image.getHeight());
 		this.colWidth = this.imageWidth / columns;
 		this.rowHeight = this.imageHeight / rows;
 	}
@@ -35,7 +35,7 @@ public class SpritesheetFrame extends Shape {
 		int sx2 = sx1 + this.colWidth;
 		int sy2 = sy1 + this.rowHeight;
 		
-		g.getAWTGraphics().drawImage(image.getAWTImage(), dx1, dy1, dx2, dy2, sx1, sy1, sx2, sy2, null);
+		g.getAWTGraphics().drawImage(image.getBufferedImage(), dx1, dy1, dx2, dy2, sx1, sy1, sx2, sy2, null);
 	}
 	
 	public void nextFrame() {
