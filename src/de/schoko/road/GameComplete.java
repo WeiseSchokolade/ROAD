@@ -38,7 +38,7 @@ public class GameComplete extends Menu {
 	
 	@Override
 	public void update(double deltaTime) {
-		if (mainMenuButton.isPressed()) {
+		if (mainMenuButton.wasReleased()) {
 			RoadProject.get().setMenu(new MainMenu());
 		}
 	}
