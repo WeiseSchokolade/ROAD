@@ -30,7 +30,7 @@ public class Constants {
 	
 	public static double ROAD_WIDTH = 1.5;
 	public static double ROAD_BOUNDS_WIDTH = 1.4;
-	public static double ROAD_AI_WIDTH = 0.6;
+	public static double ROAD_AI_WIDTH = 0.8;
 	
 	public static Color MINIMAP_COLOR = Graph.getColor(255, 255, 255, 127);
 	public static Color[] COLOR_ORDER = {
