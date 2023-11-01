@@ -26,7 +26,7 @@ public class RoadLayer extends Layer {
 	public void draw(Graph g) {
 		Stroke prevStroke = g.getAWTGraphics().getStroke();
 		if (Constants.DRAW_ROAD) {
-			if (Constants.renderQuality.hasSmoothEdges()) {
+			if (Constants.RENDER_QUALITY.hasSmoothEdges()) {
 				g.getAWTGraphics().setStroke(new BasicStroke(g.convSLW(0.25f), BasicStroke.CAP_ROUND, BasicStroke.JOIN_BEVEL));
 			} else {
 				g.getAWTGraphics().setStroke(new BasicStroke(g.convSLW(0.25f)));
@@ -34,9 +34,9 @@ public class RoadLayer extends Layer {
 			
 			Vector2D[] points = new Vector2D[18];
 			Vector2D point;
-			for (double t = 0; t < catmullRomSpline.getMaxT(); t += Constants.renderQuality.getRoadDetail()) {
+			for (double t = 0; t < catmullRomSpline.getMaxT(); t += Constants.RENDER_QUALITY.getRoadDetail()) {
 				point = catmullRomSpline.getPoint(t);
-				if (!onScreen(g, point, Constants.renderQuality.getRoadOutOfBoundsHide())) continue;
+				if (!onScreen(g, point, Constants.RENDER_QUALITY.getRoadOutOfBoundsHide())) continue;
 				Vector2D derivative = catmullRomSpline.getDerivative(t).normalize().multiply(Constants.ROAD_WIDTH);
 				Vector2D offDeriv = derivative.rotate(Math.toRadians(90));
 				Vector2D[] newPoints = new Vector2D[points.length];
@@ -53,7 +53,7 @@ public class RoadLayer extends Layer {
 			Vector2D lastLeftLine = null;
 			Vector2D lastRightLine = null;
 			Vector2D lastPoint = null;
-			for (double t = 0; t < catmullRomSpline.getMaxT(); t += Constants.renderQuality.getRoadDetail()) {
+			for (double t = 0; t < catmullRomSpline.getMaxT(); t += Constants.RENDER_QUALITY.getRoadDetail()) {
 				point = catmullRomSpline.getPoint(t);
 				
 				if (lastPoint != null) minimapDrawLine(g, lastPoint, point, Graph.getColor(255, 255, 255));
@@ -76,7 +76,7 @@ public class RoadLayer extends Layer {
 				Vector2D point = catmullRomSpline.getPoint(t);
 				drawPoint(g, point);
 			}
-			if (Constants.renderQuality.hasSmoothEdges()) {
+			if (Constants.RENDER_QUALITY.hasSmoothEdges()) {
 				g.getAWTGraphics().setStroke(new BasicStroke(g.convSLW(0.1f), BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
 			}
 			for (int i = 0; i < catmullRomSpline.getPointAmount() - 3; i++) {
@@ -154,7 +154,7 @@ public class RoadLayer extends Layer {
 	
 	public void minimapDrawLine(Graph g, Vector2D v0, Vector2D v1, Color color) {
 		HUDGraph hud = g.getHUD();
-		if (Constants.renderQuality.getRoadOutOfBoundsHide() < 150) {
+		if (Constants.RENDER_QUALITY.getRoadOutOfBoundsHide() < 150) {
 			if (Math.abs(g.convSX(v0.getX()) - g.convSX(v1.getX())) < 1) return;
 			if (Math.abs(g.convSY(v0.getY()) - g.convSY(v1.getY())) < 1) return;
 		}

@@ -37,16 +37,16 @@ public class SettingsMenu extends Menu {
 		context.getSettings().setAutoCam(false);
 		context.getSettings().setRenderCoordinateSystem(false);
 		
-		renderQualityButton = new TextButton(context, "Quality: " + Constants.renderQuality.getName(), 30, 90, Color.RED, Constants.MAIN_MENU_FONT,
+		renderQualityButton = new TextButton(context, "Quality: " + Constants.RENDER_QUALITY.getName(), 30, 90, Color.RED, Constants.MAIN_MENU_FONT,
 				Constants.MAIN_MENU_BACKGROUND_COLOR, Constants.MAIN_MENU_BACKGROUND_COLOR, Color.WHITE, Color.LIGHT_GRAY);
-		showNamesButton = new TextButton(context, "Show Names: " + Constants.SHOW_NAMES, 30, 160, Color.RED, Constants.MAIN_MENU_FONT,
+		showNamesButton = new TextButton(context, "Show Names: " + Constants.SHOW_NAMES, 30, 180, Color.RED, Constants.MAIN_MENU_FONT,
 				Constants.MAIN_MENU_BACKGROUND_COLOR, Constants.MAIN_MENU_BACKGROUND_COLOR, Color.WHITE, Color.LIGHT_GRAY);
-		showFramesButton = new TextButton(context, "Show Frames: " + Constants.SHOW_FRAMES, 30, 210, Color.RED, Constants.MAIN_MENU_FONT,
+		showFramesButton = new TextButton(context, "Show Frames: " + Constants.SHOW_FRAMES, 30, 230, Color.RED, Constants.MAIN_MENU_FONT,
 				Constants.MAIN_MENU_BACKGROUND_COLOR, Constants.MAIN_MENU_BACKGROUND_COLOR, Color.WHITE, Color.LIGHT_GRAY);
 		exitButton = new TextButton(context, "Close Settings", 30, 0, Color.RED, Constants.MAIN_MENU_FONT,
 				Constants.MAIN_MENU_BACKGROUND_COLOR, Constants.MAIN_MENU_BACKGROUND_COLOR, Color.WHITE, Color.LIGHT_GRAY);
-		ipInputField = new TextInputBox(context, 80, 260, Constants.SERVER_IP, 999);
-		portInputField = new IntInputBox(context, 110, 300, Constants.SERVER_PORT, 1, 65536);
+		ipInputField = new TextInputBox(context, 80, 280, Constants.SERVER_IP, 999);
+		portInputField = new IntInputBox(context, 110, 320, Constants.SERVER_PORT, 1, 65536);
 	}
 	
 	@Override
@@ -70,9 +70,9 @@ public class SettingsMenu extends Menu {
 		if (renderQualityButton.wasReleased()) {
 			currentQuality++;
 			if (currentQuality >= qualities.length) currentQuality = 0;
-			Constants.renderQuality = qualities[currentQuality];
-			renderQualityButton.setText("Quality: " + Constants.renderQuality.getName());
-			settingsConfig.set("quality", Constants.renderQuality.getName());
+			Constants.RENDER_QUALITY = qualities[currentQuality];
+			renderQualityButton.setText("Quality: " + Constants.RENDER_QUALITY.getName());
+			settingsConfig.set("quality", Constants.RENDER_QUALITY.getName());
 		}
 		
 		if (showNamesButton.wasReleased()) {
@@ -104,8 +104,9 @@ public class SettingsMenu extends Menu {
 	public void render(Graph g) {
 		HUDGraph hud = g.getHUD();
 		
-		hud.drawText("Note: The actual quality depends on your hardware", 30, 150, Color.RED, Constants.MAIN_MENU_SMALL_FONT, TextAlignment.LEFT);
 		hud.draw(renderQualityButton);
+		hud.drawText(Constants.RENDER_QUALITY.getDescription(), 30, 145, Color.RED, Constants.MAIN_MENU_SMALL_FONT, TextAlignment.LEFT);
+		hud.drawText("Note: The actual quality depends on your hardware", 30, 150 + Constants.MAIN_MENU_SMALL_FONT.getSize(), Color.RED, Constants.MAIN_MENU_SMALL_FONT, TextAlignment.LEFT);
 		
 		hud.draw(showNamesButton);
 		
@@ -114,9 +115,9 @@ public class SettingsMenu extends Menu {
 		exitButton.setY((int) (hud.getHeight() - exitButton.getHeight() - 30));
 		hud.draw(exitButton);
 		
-		hud.drawText("IP:", 30, 285, Color.RED, Constants.MAIN_MENU_FONT, TextAlignment.LEFT);
+		hud.drawText("IP:", 30, 305, Color.RED, Constants.MAIN_MENU_FONT, TextAlignment.LEFT);
 		hud.draw(ipInputField);
-		hud.drawText("Port:", 30, 325, Color.RED, Constants.MAIN_MENU_FONT, TextAlignment.LEFT);
+		hud.drawText("Port:", 30, 345, Color.RED, Constants.MAIN_MENU_FONT, TextAlignment.LEFT);
 		hud.draw(portInputField);
 	}
 }

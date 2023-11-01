@@ -22,7 +22,7 @@ public class Constants {
 	public static String PLAYER_NAME = "Player";
 	public static CarModel CAR_MODEL = CarModel.BLUE;
 	
-	public static RenderQuality renderQuality = RenderQuality.NORMAL;
+	public static RenderQuality RENDER_QUALITY = RenderQuality.NORMAL;
 	
 	public static boolean SHOW_NAMES = true;
 	public static boolean DRAW_ROAD = true;

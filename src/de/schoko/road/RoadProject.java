@@ -84,7 +84,7 @@ public class RoadProject extends Renderer {
 			if (quality != null) {
 				RenderQuality renderQuality = RenderQuality.valueOf(quality.toUpperCase());
 				if (renderQuality != null) {
-					Constants.renderQuality = renderQuality;
+					Constants.RENDER_QUALITY = renderQuality;
 				} else {
 					System.out.println("Unknown quality: " + quality);
 				}
