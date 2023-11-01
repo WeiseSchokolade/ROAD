@@ -90,7 +90,7 @@ public class ConnectionMenu extends Menu {
 			hud.drawText("Game needs at least two players to start!", hud.getWidth() / 2, hud.getHeight() / 2 + readyButton.getHeight() + Constants.MAIN_MENU_SMALL_FONT.getSize(), Color.RED, Constants.MAIN_MENU_SMALL_FONT, TextAlignment.CENTER);
 		}
 		
-		hud.drawText("Map: " + map, (int) ((hud.getWidth() - readyButton.getWidth()) / 2), 45, Color.RED, Constants.MAIN_MENU_FONT, TextAlignment.LEFT);
+		hud.drawText("Map: " + map, (int) (hud.getWidth() / 2), 45, Color.RED, Constants.MAIN_MENU_FONT, TextAlignment.CENTER);
 		
 		double playerListX = hud.getWidth() / 5;
 		hud.drawText("Players - Ready: " + readyAmount + "/" + mapPlayers.length, playerListX, 120, Color.RED, Constants.MAIN_MENU_FONT, TextAlignment.CENTER);
