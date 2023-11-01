@@ -2,29 +2,70 @@ package de.schoko.road.layers;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.Stroke;
+import java.awt.image.BufferedImage;
 
+import de.schoko.rendering.Context;
 import de.schoko.rendering.Graph;
 import de.schoko.rendering.HUDGraph;
+import de.schoko.rendering.Image;
 import de.schoko.road.CatmullRomSpline;
 import de.schoko.road.Constants;
 import de.schoko.road.Vector2D;
 
 public class RoadLayer extends Layer {
 	private CatmullRomSpline catmullRomSpline;
+	private Image image;
 	
 	public RoadLayer(CatmullRomSpline catmullRomSpline) {
 		this.catmullRomSpline = catmullRomSpline;
 	}
 	
 	@Override
+	public void onLoad(Context context) {
+		BufferedImage bufferedImage = new BufferedImage(512, 512, BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g2D = bufferedImage.createGraphics();
+		renderMinimap(g2D, 512, 512);
+		g2D.dispose();
+		image = new Image("map", bufferedImage);
+	}
+	
+	@Override
 	public void update(double deltaTime) {
 		
+	}
+	
+	public void renderMinimap(Graphics2D g2D, int width, int height) {
+		Stroke prevStroke = g2D.getStroke();
+		g2D.setStroke(new BasicStroke(10f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_BEVEL));
+		g2D.setColor(Graph.getColor(255, 255, 255));
+		
+		Vector2D point = null;
+		Vector2D lastPoint = null;
+		for (double t = 0; t < catmullRomSpline.getMaxT(); t += Constants.RENDER_QUALITY.getRoadDetail()) {
+			point = catmullRomSpline.getPoint(t);
+			
+			if (lastPoint != null) {
+				minimapDrawLine(g2D, width, height, lastPoint, point);
+			}
+			lastPoint = point;
+		}
+		g2D.setStroke(prevStroke);
+	}
+
+	public void minimapDrawLine(Graphics2D g2D, int width, int height, Vector2D v0, Vector2D v1) {
+		g2D.drawLine(		(int) (width - 80 + v0.getX() * 4),
+							(int) (height - 80 - v0.getY() * 4),
+							(int) (width - 80 + v1.getX() * 4),
+							(int) (height - 80 - v1.getY() * 4));
 	}
 
 	@Override
 	public void draw(Graph g) {
 		Stroke prevStroke = g.getAWTGraphics().getStroke();
+		HUDGraph hud = g.getHUD();
+		hud.drawImage(hud.getWidth() - 512, hud.getHeight() - 512, image, 1);
 		if (Constants.DRAW_ROAD) {
 			if (Constants.RENDER_QUALITY.hasSmoothEdges()) {
 				g.getAWTGraphics().setStroke(new BasicStroke(g.convSLW(0.25f), BasicStroke.CAP_ROUND, BasicStroke.JOIN_BEVEL));
@@ -52,12 +93,8 @@ public class RoadLayer extends Layer {
 			}
 			Vector2D lastLeftLine = null;
 			Vector2D lastRightLine = null;
-			Vector2D lastPoint = null;
 			for (double t = 0; t < catmullRomSpline.getMaxT(); t += Constants.RENDER_QUALITY.getRoadDetail()) {
 				point = catmullRomSpline.getPoint(t);
-				
-				if (lastPoint != null) minimapDrawLine(g, lastPoint, point, Graph.getColor(255, 255, 255));
-				lastPoint = point;
 				
 				Vector2D derivative = catmullRomSpline.getDerivative(t).normalize().multiply(Constants.ROAD_WIDTH);
 				Vector2D offDeriv = derivative.rotate(Math.toRadians(90));
@@ -152,19 +189,6 @@ public class RoadLayer extends Layer {
 					 10, color);
 	}
 	
-	public void minimapDrawLine(Graph g, Vector2D v0, Vector2D v1, Color color) {
-		HUDGraph hud = g.getHUD();
-		if (Constants.RENDER_QUALITY.getRoadOutOfBoundsHide() < 150) {
-			if (Math.abs(g.convSX(v0.getX()) - g.convSX(v1.getX())) < 1) return;
-			if (Math.abs(g.convSY(v0.getY()) - g.convSY(v1.getY())) < 1) return;
-		}
-		hud.drawLine(hud.getWidth() - 80 + v0.getX() * 4,
-					 hud.getHeight() - 80 - v0.getY() * 4,
-					 hud.getWidth() - 80 + v1.getX() * 4,
-					 hud.getHeight() - 80 - v1.getY() * 4,
-					 color, 10f);
-	}
-
 	public CatmullRomSpline getCatmullRomSpline() {
 		return catmullRomSpline;
 	}
