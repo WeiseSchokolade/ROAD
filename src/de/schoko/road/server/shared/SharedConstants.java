@@ -17,8 +17,13 @@ public final class SharedConstants {
 	 *   </li>
 	 * </ul>
 	 */
-	public static final int PROTOCOL_VERSION = 1;
-
+	public static final int PROTOCOL_VERSION = 2;
+	
+	/**
+	 * Edition of the game. This should only be changed by modders and developers of forks.
+	 */
+	public static final String EDITION = "Vanilla";
+	
 	/**
 	 * Order of the colors of cars when added to {@link SingleGame}.
 	 */

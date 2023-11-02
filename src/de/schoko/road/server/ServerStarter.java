@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import de.schoko.road.Constants;
+import de.schoko.road.server.shared.SharedConstants;
 import de.schoko.saving.config.Config;
 import de.schoko.saving.config.ConfigSettings;
 import de.schoko.saving.config.ResourceLocation;
@@ -44,6 +45,7 @@ public class ServerStarter {
 				System.out.println("Couldn't parse " + args[0] + "as the port, using default port " + port);
 			}
 		}
+		System.out.println("Starting Server for R.O.A.D. " + SharedConstants.EDITION + " protocol version " + SharedConstants.PROTOCOL_VERSION + " on port " + port);
 		
 		Server server = new Server(port, new ApplicationProvider() {
 			@Override

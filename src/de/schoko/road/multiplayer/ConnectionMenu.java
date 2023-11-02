@@ -38,7 +38,7 @@ public class ConnectionMenu extends Menu {
 	public void onLoad(Context context) {
 		try {
 			client = new Client(Constants.SERVER_IP, Constants.SERVER_PORT);
-			client.send(new HeaderPacket(SharedConstants.PROTOCOL_VERSION, Constants.PLAYER_NAME, Constants.CAR_MODEL.getImageName(), map));
+			client.send(new HeaderPacket(SharedConstants.PROTOCOL_VERSION, SharedConstants.EDITION, Constants.PLAYER_NAME, Constants.CAR_MODEL.getImageName(), map));
 		} catch (ConnectException e) {
 			System.out.println("Couldn't connect to server: " + e.getMessage());
 			RoadProject.get().setMenu(new MultiPlayerMenu("Couldn't connect to server. Check your ip/port in the settings."));
