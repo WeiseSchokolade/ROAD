@@ -27,6 +27,11 @@ public class ServerLobby extends Application {
 	private ArrayList<LobbyConnection> connections;
 	private HashMap<String, MapStatus> maps;
 	
+	/**
+	 * Time in milliseconds until client gets disconnected if no header is sent.
+	 */
+	private static final long CLIENT_TIMEOUT_UNTIL_HEADER = 5000;
+	
 	public ServerLobby(Server server) {
 		super("Road Server Lobby", false);
 		this.server = server;
@@ -40,8 +45,13 @@ public class ServerLobby extends Application {
 	@Override
 	public void update(double deltaTimeMS) {
 		Gson gson = Packet.getGson();
+		long currentTime = System.currentTimeMillis();
 		for (int i = 0; i < connections.size(); i++) {
 			LobbyConnection connection = connections.get(i);
+			if (!connection.hasSentHeader() && currentTime > connection.getConnectionTime() + CLIENT_TIMEOUT_UNTIL_HEADER) {
+				connection.close();
+				continue;
+			}
 			if (connection.isClosed()) {
 				connections.remove(i);
 				i--;
@@ -61,6 +71,7 @@ public class ServerLobby extends Application {
 						break;
 					}
 					System.out.println("Connection: " + read);
+					connection.setSentHeader(true);
 					connection.setVersion(p0.version);
 					connection.setName(p0.name);
 					connection.setMap(p0.map);

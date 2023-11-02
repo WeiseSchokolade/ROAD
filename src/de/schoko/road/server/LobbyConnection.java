@@ -6,12 +6,16 @@ import de.schoko.serverbase.core.Connection;
 public class LobbyConnection {
 	private Connection connection;
 	
+	private long connectionTime;
+	private boolean sentHeader;
+	
 	private int version;
 	private String name;
 	private String map;
 	private boolean ready;
 	
 	public LobbyConnection(Connection connection) {
+		this.connectionTime = System.currentTimeMillis();
 		this.connection = connection;
 	}
 	
@@ -35,6 +39,14 @@ public class LobbyConnection {
 		return connection.isClosed();
 	}
 	
+	public long getConnectionTime() {
+		return connectionTime;
+	}
+	
+	public boolean hasSentHeader() {
+		return sentHeader;
+	}
+	
 	public int getVersion() {
 		return version;
 	}
@@ -49,6 +61,10 @@ public class LobbyConnection {
 	
 	public boolean isReady() {
 		return ready;
+	}
+	
+	public void setSentHeader(boolean sentHeader) {
+		this.sentHeader = sentHeader;
 	}
 	
 	public void setVersion(int version) {
