@@ -6,6 +6,9 @@ import java.util.HashMap;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
+import de.schoko.road.server.shared.DisconnectionReason;
+import de.schoko.road.server.shared.SharedConstants;
+import de.schoko.road.server.shared.packets.DisconnectionPacket;
 import de.schoko.road.server.shared.packets.HeaderPacket;
 import de.schoko.road.server.shared.packets.LobbyReadyPacket;
 import de.schoko.road.server.shared.packets.LobbyStatusPacket;
@@ -52,16 +55,23 @@ public class ServerLobby extends Application {
 				switch (defaultPacket.getType()) {
 				case "HeaderPacket":
 					HeaderPacket p0 = gson.fromJson(read, HeaderPacket.class);
+					if (p0.version != SharedConstants.PROTOCOL_VERSION) {
+						connection.send(new DisconnectionPacket(DisconnectionReason.DIFFERENT_PROTOCOL_VERSION));
+						connection.close();
+						break;
+					}
 					System.out.println("Connection: " + read);
-					connection.setName(p0.name);
 					connection.setVersion(p0.version);
+					connection.setName(p0.name);
 					connection.setMap(p0.map);
 					if (mapExists(p0.map)) {
 						MapStatus map = maps.get(p0.map);
 						map.addPlayer(connection);
 						sendMapUpdate(connection.getMap());
 					} else {
-						// TODO: Add handling for when map doesn't exist
+						connection.send(new DisconnectionPacket(DisconnectionReason.ILLEGAL_VALUE, "map"));
+						connection.close();
+						break;
 					}
 					break;
 				case "LobbyReadyPacket":
