@@ -71,11 +71,12 @@ public class ServerLobby extends Application {
 						break;
 					}
 					if (p0.edition != null) {
-						if (p0.edition.equals(SharedConstants.EDITION)) {
+						if (!p0.edition.equals(SharedConstants.EDITION)) {
 							connection.send(new DisconnectionPacket(DisconnectionReason.DIFFERENT_PROTOCOL_VERSION, "ServerEdition" + SharedConstants.EDITION));
 							connection.close();
 							break;
 						}
+					} else {
 						connection.send(new DisconnectionPacket(DisconnectionReason.ILLEGAL_VALUE, "EditionMissing"));
 						connection.close();
 						break;
