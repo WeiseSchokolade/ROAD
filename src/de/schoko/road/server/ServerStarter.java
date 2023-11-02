@@ -61,6 +61,19 @@ public class ServerStarter {
 		consoleManager.registerCommand("echo", (arguments) -> {
 			System.out.println(arguments);
 		});
+		String helpMessage = """
+				 ----- Help -----
+				Commands:
+				 - help 						Sends this message
+				 - stop 						Stops the server
+				 - info							Shows information about the server
+				 - echo [args...] 				Echos provided arguments
+				 - list {threads|applications}	Lists data of the server
+				""";
+		consoleManager.registerCommand("help", (arguments) -> {
+			System.out.println(helpMessage);
+			
+		});
 		consoleManager.registerCommand("list", (argument) -> {
 			String[] arguments = argument.split(" ");
 			if (arguments.length == 0) {
