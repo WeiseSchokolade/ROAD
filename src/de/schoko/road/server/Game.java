@@ -4,10 +4,10 @@ import java.util.ArrayList;
 
 import com.google.gson.JsonSyntaxException;
 
-import de.schoko.road.server.packets.CarInfoPacket;
-import de.schoko.road.server.packets.GamePlayersUpdatePacket;
-import de.schoko.road.server.packets.GameStartPacket;
-import de.schoko.road.server.packets.Packet;
+import de.schoko.road.server.shared.packets.CarInfoPacket;
+import de.schoko.road.server.shared.packets.GamePlayersUpdatePacket;
+import de.schoko.road.server.shared.packets.GameStartPacket;
+import de.schoko.road.server.shared.packets.Packet;
 import de.schoko.serverbase.Application;
 import de.schoko.serverbase.Server;
 import de.schoko.serverbase.core.Connection;

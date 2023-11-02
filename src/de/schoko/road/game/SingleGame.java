@@ -18,6 +18,7 @@ import de.schoko.road.Menu;
 import de.schoko.road.RoadProject;
 import de.schoko.road.Vector2D;
 import de.schoko.road.layers.RoadLayer;
+import de.schoko.road.server.shared.SharedConstants;
 
 public class SingleGame extends Menu {
 	private Map map;
@@ -186,7 +187,7 @@ public class SingleGame extends Menu {
 		Vector2D offDir = dir.rotate(Math.toRadians(90));
 		Vector2D pos = entry.copy();
 		
-		car.setColor(Constants.COLOR_ORDER[id]);
+		car.setColor(SharedConstants.COLOR_ORDER[id]);
 		car.setDir(dir);
 		
 		double dirMultiplier = id / 3 + 1;

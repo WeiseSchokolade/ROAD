@@ -7,9 +7,9 @@ import de.schoko.road.game.Car;
 import de.schoko.road.game.PlayerCar;
 import de.schoko.road.game.RemoteCar;
 import de.schoko.road.game.SingleGame;
-import de.schoko.road.server.packets.CarInfoPacket;
-import de.schoko.road.server.packets.GamePlayersUpdatePacket;
-import de.schoko.road.server.packets.Packet;
+import de.schoko.road.server.shared.packets.CarInfoPacket;
+import de.schoko.road.server.shared.packets.GamePlayersUpdatePacket;
+import de.schoko.road.server.shared.packets.Packet;
 import de.schoko.serverbase.PacketReducer;
 
 public class SingleGameWrapMenu extends Menu {

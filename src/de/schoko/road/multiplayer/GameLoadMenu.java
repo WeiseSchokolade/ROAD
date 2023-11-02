@@ -12,7 +12,7 @@ import de.schoko.road.RoadProject;
 import de.schoko.road.game.PlayerCar;
 import de.schoko.road.game.RemoteCar;
 import de.schoko.road.game.SingleGame;
-import de.schoko.road.server.packets.GameStartPacket;
+import de.schoko.road.server.shared.packets.GameStartPacket;
 
 public class GameLoadMenu extends Menu {
 	private Client client;

@@ -12,11 +12,12 @@ import de.schoko.road.Constants;
 import de.schoko.road.Menu;
 import de.schoko.road.RoadProject;
 import de.schoko.road.TextButton;
-import de.schoko.road.server.packets.GameStartPacket;
-import de.schoko.road.server.packets.HeaderPacket;
-import de.schoko.road.server.packets.LobbyReadyPacket;
-import de.schoko.road.server.packets.LobbyStatusPacket;
-import de.schoko.road.server.packets.Packet;
+import de.schoko.road.server.shared.SharedConstants;
+import de.schoko.road.server.shared.packets.GameStartPacket;
+import de.schoko.road.server.shared.packets.HeaderPacket;
+import de.schoko.road.server.shared.packets.LobbyReadyPacket;
+import de.schoko.road.server.shared.packets.LobbyStatusPacket;
+import de.schoko.road.server.shared.packets.Packet;
 
 public class ConnectionMenu extends Menu {
 	private Client client;
@@ -37,7 +38,7 @@ public class ConnectionMenu extends Menu {
 	public void onLoad(Context context) {
 		try {
 			client = new Client(Constants.SERVER_IP, Constants.SERVER_PORT);
-			client.send(new HeaderPacket(Constants.VERSION, Constants.PLAYER_NAME, Constants.CAR_MODEL.getImageName(), map));
+			client.send(new HeaderPacket(SharedConstants.PROTOCOL_VERSION, Constants.PLAYER_NAME, Constants.CAR_MODEL.getImageName(), map));
 		} catch (ConnectException e) {
 			System.out.println("Couldn't connect to server: " + e.getMessage());
 			RoadProject.get().setMenu(new MultiPlayerMenu("Couldn't connect to server. Check your ip/port in the settings."));

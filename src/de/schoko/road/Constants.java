@@ -6,7 +6,6 @@ import java.awt.Font;
 import de.schoko.rendering.Graph;
 
 public class Constants {
-	public static final int VERSION = 1;
 	public static boolean DEV_ACCESS = false;
 	public static String RESOURCE_PATH = "src/de/schoko/road/";
 
@@ -33,15 +32,4 @@ public class Constants {
 	public static double ROAD_AI_WIDTH = 0.8;
 	
 	public static Color MINIMAP_COLOR = Graph.getColor(255, 255, 255, 127);
-	public static Color[] COLOR_ORDER = {
-			Graph.getColor(0, 0, 255),
-			Graph.getColor(255, 0, 0),
-			Graph.getColor(0, 255, 0),
-			Graph.getColor(255, 255, 0),
-			Graph.getColor(0, 255, 255),
-			Graph.getColor(255, 0, 255),
-			Graph.getColor(255, 127, 0),
-			Graph.getColor(0, 255, 127),
-			Graph.getColor(127, 0, 255)
-	};
 }

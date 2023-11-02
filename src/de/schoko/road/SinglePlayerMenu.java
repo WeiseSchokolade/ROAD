@@ -7,6 +7,7 @@ import de.schoko.rendering.Graph;
 import de.schoko.rendering.HUDGraph;
 import de.schoko.rendering.TextAlignment;
 import de.schoko.road.game.SingleGame;
+import de.schoko.road.server.shared.SharedConstants;
 
 public class SinglePlayerMenu extends Menu {
 	private TextButton playButton;
@@ -24,7 +25,7 @@ public class SinglePlayerMenu extends Menu {
 		
 		playButton = new TextButton(context, "Play", 0, 0, Color.RED, Constants.MAIN_MENU_FONT, Constants.MAIN_MENU_BACKGROUND_COLOR, Constants.MAIN_MENU_BACKGROUND_COLOR, Color.WHITE, Color.LIGHT_GRAY);
 		editButton = new TextButton(context, "Edit", 0, 0, Color.RED, Constants.MAIN_MENU_FONT, Constants.MAIN_MENU_BACKGROUND_COLOR, Constants.MAIN_MENU_BACKGROUND_COLOR, Color.WHITE, Color.LIGHT_GRAY);
-		mapButton = new TextButton(context, "Map: " + Maps.maps[currentMap], 0, 0, Color.RED, Constants.MAIN_MENU_FONT, Constants.MAIN_MENU_BACKGROUND_COLOR, Constants.MAIN_MENU_BACKGROUND_COLOR, Color.WHITE, Color.LIGHT_GRAY);
+		mapButton = new TextButton(context, "Map: " + SharedConstants.MAP_NAMES[currentMap], 0, 0, Color.RED, Constants.MAIN_MENU_FONT, Constants.MAIN_MENU_BACKGROUND_COLOR, Constants.MAIN_MENU_BACKGROUND_COLOR, Color.WHITE, Color.LIGHT_GRAY);
 		backButton = new TextButton(context, "Back", 5, 0, Color.RED, Constants.MAIN_MENU_FONT, Constants.MAIN_MENU_BACKGROUND_COLOR, Constants.MAIN_MENU_BACKGROUND_COLOR, Color.WHITE, Color.LIGHT_GRAY);
 		carSelectionButton = new CarSelectionButton(context);
 	}
@@ -32,17 +33,17 @@ public class SinglePlayerMenu extends Menu {
 	@Override
 	public void update(double deltaTime) {
 		if (playButton.wasReleased()) {
-			RoadProject.get().setMenu(new SingleGame(Maps.loadMap(Maps.maps[currentMap]), true));
+			RoadProject.get().setMenu(new SingleGame(Maps.loadMap(SharedConstants.MAP_NAMES[currentMap]), true));
 			return;
 		}
 		if (Constants.DEV_ACCESS && editButton.wasReleased()) {
-			RoadProject.get().setMenu(new EditMenu(Maps.loadMap(Maps.maps[currentMap])));
+			RoadProject.get().setMenu(new EditMenu(Maps.loadMap(SharedConstants.MAP_NAMES[currentMap])));
 			return;
 		}
 		if (mapButton.wasReleased()) {
 			currentMap++;
-			if (currentMap >= Maps.maps.length) currentMap = 0;
-			mapButton.setText("Map: " + Maps.maps[currentMap]);
+			if (currentMap >= SharedConstants.MAP_NAMES.length) currentMap = 0;
+			mapButton.setText("Map: " + SharedConstants.MAP_NAMES[currentMap]);
 			return;
 		}
 		if (backButton.wasReleased()) {

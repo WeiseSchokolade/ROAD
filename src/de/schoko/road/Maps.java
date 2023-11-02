@@ -9,12 +9,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 public class Maps {
-	public static final String[] maps = {
-			"track_1",
-			"track_2",
-			"track_3"
-	};
-	
 	public static void saveMap(Map map) {
 		Gson gson = new GsonBuilder()
 					.create();

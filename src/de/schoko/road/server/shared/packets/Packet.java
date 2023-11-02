@@ -1,4 +1,4 @@
-package de.schoko.road.server.packets;
+package de.schoko.road.server.shared.packets;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

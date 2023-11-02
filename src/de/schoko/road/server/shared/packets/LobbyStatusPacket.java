@@ -1,4 +1,4 @@
-package de.schoko.road.server.packets;
+package de.schoko.road.server.shared.packets;
 
 public class LobbyStatusPacket extends Packet {
 	public int readyAmount;

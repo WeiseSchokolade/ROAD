@@ -6,10 +6,10 @@ import java.util.HashMap;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
-import de.schoko.road.server.packets.HeaderPacket;
-import de.schoko.road.server.packets.LobbyReadyPacket;
-import de.schoko.road.server.packets.LobbyStatusPacket;
-import de.schoko.road.server.packets.Packet;
+import de.schoko.road.server.shared.packets.HeaderPacket;
+import de.schoko.road.server.shared.packets.LobbyReadyPacket;
+import de.schoko.road.server.shared.packets.LobbyStatusPacket;
+import de.schoko.road.server.shared.packets.Packet;
 import de.schoko.serverbase.Application;
 import de.schoko.serverbase.Server;
 import de.schoko.serverbase.core.Connection;

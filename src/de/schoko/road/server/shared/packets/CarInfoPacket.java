@@ -1,4 +1,4 @@
-package de.schoko.road.server.packets;
+package de.schoko.road.server.shared.packets;
 
 import de.schoko.road.Vector2D;
 import de.schoko.road.game.Car;
