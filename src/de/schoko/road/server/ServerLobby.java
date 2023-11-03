@@ -18,27 +18,25 @@ import de.schoko.serverbase.Server;
 import de.schoko.serverbase.core.Connection;
 
 public class ServerLobby extends Application {
-	private static final String[] KNOWN_MAPS = {
-			"track_1",
-			"track_2",
-			"track_3"};
-	
 	private Server server;
 	private ArrayList<LobbyConnection> connections;
 	private HashMap<String, MapStatus> maps;
+	private String[] mapNames;
+	
 	
 	/**
 	 * Time in milliseconds until client gets disconnected if no header is sent.
 	 */
 	private static final long CLIENT_TIMEOUT_UNTIL_HEADER = 5000;
-	
-	public ServerLobby(Server server) {
+
+	public ServerLobby(Server server, String[] mapNames) {
 		super("Road Server Lobby", false);
 		this.server = server;
+		this.mapNames = mapNames;
 		connections = new ArrayList<>();
 		maps = new HashMap<>();
-		for (int i = 0; i < KNOWN_MAPS.length; i++) {
-			maps.put(KNOWN_MAPS[i], new MapStatus(KNOWN_MAPS[i]));
+		for (int i = 0; i < mapNames.length; i++) {
+			maps.put(mapNames[i], new MapStatus(mapNames[i]));
 		}
 	}
 	
@@ -127,8 +125,8 @@ public class ServerLobby extends Application {
 	}
 	
 	public boolean mapExists(String map) {
-		for (int i = 0; i < KNOWN_MAPS.length; i++) {
-			if (KNOWN_MAPS[i].equals(map)) {
+		for (int i = 0; i < mapNames.length; i++) {
+			if (mapNames[i].equals(map)) {
 				return true;
 			}
 		}
@@ -137,7 +135,7 @@ public class ServerLobby extends Application {
 	
 	public void sendMapUpdate(String mapName) {
 		MapStatus map = maps.get(mapName);
-		sendAllConnectionsWithMap(mapName, new LobbyStatusPacket(map.getReadyAmount(), map.getPlayerNames(), connections.size()));
+		sendAllConnectionsWithMap(mapName, new LobbyStatusPacket(map.getReadyAmount(), map.getPlayerNames(), mapNames, connections.size()));
 	}
 	
 	public void sendAllConnectionsWithMap(String mapSelection, Packet packet) {

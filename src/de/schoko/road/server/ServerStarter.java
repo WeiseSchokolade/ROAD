@@ -25,16 +25,30 @@ public class ServerStarter {
 		
 		String parentDir = "maps/";
 		File dirFile = new File(parentDir);
-		dirFile.mkdirs();
-		try {
-			resourceCopy.copyResourcesToDir(dirFile, false,
-					Constants.RESOURCE_PATH + "levels/track_1.map",
-					Constants.RESOURCE_PATH + "levels/track_2.map",
-					Constants.RESOURCE_PATH + "levels/track_3.map");
-		} catch (IOException e) {
-			e.printStackTrace();
+		if (dirFile.exists()) {
+			System.out.println("Not loading maps");
+		} else {
+			System.out.println("Loading maps from archive");
+			dirFile.mkdirs();
+			try {
+				resourceCopy.copyResourcesToDir(dirFile, false,
+						Constants.RESOURCE_PATH + "levels/track_1.map",
+						Constants.RESOURCE_PATH + "levels/track_2.map",
+						Constants.RESOURCE_PATH + "levels/track_3.map");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
-		
+		String[] maps = dirFile.list();
+		System.out.print("Maps: ");
+		for (int i = 0; i < maps.length; i++) {
+			System.out.print(maps[i]);
+			if (i < maps.length - 1) {
+				 System.out.print(", ");
+			} else {
+				System.out.println();
+			}
+		}
 		
 		ConfigSettings.getGlobal().setBaseResourcePath(Constants.RESOURCE_PATH);
 		settings = Config.getConfig("config/server_settings.txt", ResourceLocation.FILE, "server_settings.txt", ResourceLocation.JAR);
@@ -118,7 +132,7 @@ public class ServerStarter {
 			System.out.println(" ----- Server Information -----");
 		});
 		server.setConsoleHandler(consoleManager);
-		thread = server.startApplication(new ServerLobby(server));
+		thread = server.startApplication(new ServerLobby(server, maps));
 		server.run();
 	}
 	
