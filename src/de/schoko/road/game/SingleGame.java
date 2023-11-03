@@ -12,7 +12,6 @@ import de.schoko.rendering.Image;
 import de.schoko.rendering.ImageLocation;
 import de.schoko.rendering.Keyboard;
 import de.schoko.road.Constants;
-import de.schoko.road.Controls;
 import de.schoko.road.GameComplete;
 import de.schoko.road.Map;
 import de.schoko.road.Menu;
