@@ -66,7 +66,6 @@ public class SingleGame extends Menu {
 			addLayer(new WeatherLayer());
 		}
 		
-		Constants.CONTROLS = new Controls(context.getKeyboard());
 		if (Constants.ARROW_CONTROLS) {
 			Constants.CONTROLS.setTurnLeftKey(Keyboard.LEFT);
 			Constants.CONTROLS.setTurnRightKey(Keyboard.RIGHT);

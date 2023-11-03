@@ -116,6 +116,7 @@ public class RoadProject extends Renderer {
 	@Override
 	public void onLoad(Context context) {
 		setMenu(new MainMenu());
+		Constants.CONTROLS = new Controls(context.getKeyboard());
 	}
 	
 	@Override
