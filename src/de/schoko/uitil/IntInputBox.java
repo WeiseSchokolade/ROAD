@@ -97,7 +97,7 @@ public class IntInputBox extends InputBox {
 			}
 		}
 		
-		if (mouse.getScreenX() >= this.x - 2 && mouse.getScreenY() >= this.y - 2 && mouse.getScreenX() <= this.x + this.getWidth() + 4 && mouse.getScreenY() <= this.y + this.height + 14) {
+		if (mouse.getScreenX() >= this.x - 4 && mouse.getScreenY() >= this.y - 2 && mouse.getScreenX() <= this.x + this.getWidth() + 8 && mouse.getScreenY() <= this.y + this.height + 14) {
 			if (mouse.isPressed(Mouse.LEFT_BUTTON)) {
 				setSelectedInputBox(this);
 			}
@@ -114,9 +114,9 @@ public class IntInputBox extends InputBox {
 	public void draw(HUDGraph hud) {
 		stringWidth = Graph.getStringWidth("" + num, font);
 		if (isSelected()) {
-			hud.drawRect(x - 2, y - 2, getWidth() + 4, this.height + 14, Graph.getColor(0, 255, 217));
+			hud.drawRect(x - 4, y - 2, getWidth() + 8, this.height + 14, Graph.getColor(0, 255, 217));
 		}
-		hud.drawRect(x, y, getWidth(), this.height + 10, Color.WHITE);
+		hud.drawRect(x - 2, y, getWidth() + 4, this.height + 10, Color.WHITE);
 		hud.drawText("" + num, x, y + font.getSize(), Color.BLACK, font);
 	}
 	
