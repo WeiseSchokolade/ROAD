@@ -18,7 +18,7 @@ public class Game extends Application {
 			"car_yellow",
 			"car_red"
 	};
-	private String mapName;
+	private String mapData;
 	private String[] playerNames;
 	
 	private long startTime;
@@ -26,10 +26,10 @@ public class Game extends Application {
 
 	private ArrayList<GameConnection> connections;
 
-	public Game(Server server, String mapName, String[] playerNames) {
+	public Game(Server server, String mapData, String[] playerNames) {
 		super("Road Game", true);
 		this.playerNames = playerNames;
-		this.mapName = mapName;
+		this.mapData = mapData;
 		this.connections = new ArrayList<>();
 		startTime = System.currentTimeMillis() + 7000;
 	}
@@ -101,6 +101,6 @@ public class Game extends Application {
 	public void addConnection(Connection connection) {
 		super.addConnection(connection);
 		connections.add(new GameConnection(connection, getConnections().size() - 1));
-		connection.send(Packet.toJson(new GameStartPacket(playerNames, mapName, getConnections().size() - 1, startTime)));
+		connection.send(Packet.toJson(new GameStartPacket(playerNames, mapData, getConnections().size() - 1, startTime)));
 	}
 }

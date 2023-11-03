@@ -115,7 +115,7 @@ public class ServerLobby extends Application {
 			if (mapStatus.isReady()) {
 				String[] playerNames = mapStatus.getPlayerNames();
 				ArrayList<LobbyConnection> readyPlayers = mapStatus.getReadyPlayers();
-				Game game = new Game(server, mapStatus.getName(), playerNames);
+				Game game = new Game(server, mapStatus.loadData(), playerNames);
 				for (int i = 0; i < readyPlayers.size(); i++) {
 					connections.remove(readyPlayers.get(i));
 					game.addConnection(readyPlayers.get(i).getConnection());

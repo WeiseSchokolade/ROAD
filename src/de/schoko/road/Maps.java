@@ -26,15 +26,20 @@ public class Maps {
 		}
 	}
 	
-	public static Map loadMap(String fileName) {
+	public static Map loadMapFromData(String data) {
 		Gson gson = new GsonBuilder()
 				.create();
+		Map map = gson.fromJson(data, Map.class);
+		return map;
+	}
+	
+	public static Map loadMap(String fileName) {
 		String parentDir = System.getenv("APPDATA") + File.separator + "road";
 		String path = parentDir + File.separator + fileName + Map.FILE_EXTENSION;
 		System.out.println("Loading Map: " + path);
 		try {
 			String json = Files.readString(Path.of(path));
-			Map map = gson.fromJson(json, Map.class);
+			Map map = loadMapFromData(json);
 			map.setFileName(fileName);
 			return map;
 		} catch (IOException e) {

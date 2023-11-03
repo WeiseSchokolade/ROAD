@@ -1,9 +1,11 @@
 package de.schoko.road.server;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
 import de.schoko.road.Constants;
+import de.schoko.road.ResourceCopy;
 import de.schoko.road.server.shared.SharedConstants;
 import de.schoko.saving.config.Config;
 import de.schoko.saving.config.ConfigSettings;
@@ -18,7 +20,22 @@ import de.schoko.serverbase.ext.ConsoleCommandManager;
 public class ServerStarter {
 	public static void main(String[] args) {
 		int port = 5555;
-
+		
+		ResourceCopy resourceCopy = new ResourceCopy();
+		
+		String parentDir = "maps/";
+		File dirFile = new File(parentDir);
+		dirFile.mkdirs();
+		try {
+			resourceCopy.copyResourcesToDir(dirFile, false,
+					Constants.RESOURCE_PATH + "levels/track_1.map",
+					Constants.RESOURCE_PATH + "levels/track_2.map",
+					Constants.RESOURCE_PATH + "levels/track_3.map");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		
 		ConfigSettings.getGlobal().setBaseResourcePath(Constants.RESOURCE_PATH);
 		settings = Config.getConfig("config/server_settings.txt", ResourceLocation.FILE, "server_settings.txt", ResourceLocation.JAR);
 		if (settings != null) {

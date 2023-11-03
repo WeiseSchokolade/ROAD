@@ -1,6 +1,12 @@
 package de.schoko.road.server;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
+
+import de.schoko.road.Map;
 
 public class MapStatus {
 	private String name;
@@ -64,6 +70,18 @@ public class MapStatus {
 			readyPlayers.add(players.remove(0));
 		}
 		return readyPlayers;
+	}
+	
+	public String loadData() {
+		String parentDir = "maps";
+		String path = parentDir + File.separator + name + Map.FILE_EXTENSION;
+		System.out.println("Loading Map: " + path);
+		try {
+			return Files.readString(Path.of(path));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	public ArrayList<LobbyConnection> getPlayers() {

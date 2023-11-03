@@ -28,7 +28,7 @@ public class GameLoadMenu extends Menu {
 	@Override
 	public void update(double deltaTime) {
 		if (System.currentTimeMillis() >= data.startTime - 6000) {
-			SingleGame game = new SingleGame(Maps.loadMap(data.mapName), false);
+			SingleGame game = new SingleGame(Maps.loadMapFromData(data.mapData), false);
 			client.clear();
 			String[] players = data.players;
 			for (int i = 0; i < players.length; i++) {
