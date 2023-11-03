@@ -99,7 +99,7 @@ public abstract class Car extends Entity {
 		// g.fillCircle(pos.getX(), pos.getY(), fadedColor, 0.5);
 		g.drawRotatedImage(image, pos.getX(), pos.getY(), 32, -dir.getAngle());
 		if (Constants.SHOW_NAMES) {
-			g.drawString(name, pos.getX(), pos.getY() + 0.5, fadedColor, Constants.GAME_LEADERBOARD_FONT, TextAlignment.CENTER);
+			g.getHUD().drawText(name, g.convSX(pos.getX()), g.convSY(pos.getY() + 0.5), fadedColor, Constants.GAME_LEADERBOARD_FONT, TextAlignment.CENTER);
 		}
 	}
 	
