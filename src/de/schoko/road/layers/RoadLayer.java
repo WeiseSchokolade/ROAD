@@ -162,6 +162,34 @@ public class RoadLayer extends Layer {
 		g2D.drawLine((int) (halfWidth + v0.getX() * 150), (int) (halfHeight - v0.getY() * 150), (int) (halfWidth + v1.getX() * 150), (int) (halfHeight - v1.getY() * 150));
 	}
 
+	public boolean inBounds(Vector2D pos) {
+		return getNearestT(pos) != -1;
+	}
+	
+	/**
+	 * Returns the nearest t or -1 when the pos is out of bounds
+	 */
+	public double getNearestT(Vector2D pos) {
+		for (int i = 0; i < catmullRomSpline.getMaxT(); i++) {
+			//if (pos.subtract(catmullRomSpline.getPoints().get(i)).getLengthSQ() > 100) continue;
+			for (double t = 0; t < 1; t += 0.1) {
+				Vector2D v = catmullRomSpline.getInternalPoint(t, i);
+				if (pos.subtract(v).getLengthSQ() < Constants.ROAD_BOUNDS_WIDTH * Constants.ROAD_BOUNDS_WIDTH) {
+					return i + t;
+				}
+			}
+			
+		}
+		return -1;
+	}
+
+	public void minimapDrawPoint(Graph g, Vector2D v, Color color) {
+		HUDGraph hud = g.getHUD();
+		hud.drawCircle(hud.getWidth() - 80 + v.getX() * 4,
+					 hud.getHeight() - 80 - v.getY() * 4,
+					 10, color);
+	}
+	
 	public CatmullRomSpline getCatmullRomSpline() {
 		return catmullRomSpline;
 	}
