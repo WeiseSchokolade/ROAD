@@ -8,7 +8,7 @@ import de.schoko.road.geometry.Vector2D;
 import de.schoko.road.layers.RoadLayer;
 
 public class EnemyCar extends Car {
-	private static final double DEFAULT_T = 5;
+	private static final double DEFAULT_T = 2;
 	
 	private CatmullRomSpline spline;
 	private double currentT = DEFAULT_T;
