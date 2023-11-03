@@ -8,6 +8,8 @@ import de.schoko.rendering.ImageLocation;
 import de.schoko.rendering.Keyboard;
 import de.schoko.rendering.Mouse;
 import de.schoko.rendering.shapes.ImageFrame;
+import de.schoko.road.geometry.CatmullRomSpline;
+import de.schoko.road.geometry.Vector2D;
 import de.schoko.road.layers.RoadLayer;
 
 public class EditMenu extends Menu {

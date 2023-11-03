@@ -25,6 +25,7 @@ public class SettingsMenu extends Menu {
 	private TextButton showNamesButton;
 	private TextButton showFramesButton;
 	private TextButton exitButton;
+	private TextButton arrowControlsButton;
 	
 	public SettingsMenu(Menu previousMenu) {
 		this.previousMenu = previousMenu;
@@ -61,6 +62,8 @@ public class SettingsMenu extends Menu {
 				Constants.MAIN_MENU_BACKGROUND_COLOR, Constants.MAIN_MENU_BACKGROUND_COLOR, Color.WHITE, Color.LIGHT_GRAY);
 		exitButton = new TextButton(context, "Close Settings", 30, 0, Color.RED, Constants.MAIN_MENU_FONT,
 				Constants.MAIN_MENU_BACKGROUND_COLOR, Constants.MAIN_MENU_BACKGROUND_COLOR, Color.WHITE, Color.LIGHT_GRAY);
+		arrowControlsButton = new TextButton(context, "Arrow Controls: " + Constants.ARROW_CONTROLS, 30, 355, Color.RED, Constants.MAIN_MENU_FONT,
+				Constants.MAIN_MENU_BACKGROUND_COLOR, Constants.MAIN_MENU_BACKGROUND_COLOR, Color.WHITE, Color.LIGHT_GRAY);
 	}
 	
 	@Override
@@ -88,17 +91,20 @@ public class SettingsMenu extends Menu {
 			renderQualityButton.setText("Quality: " + Constants.RENDER_QUALITY.getName());
 			settingsConfig.set("quality", Constants.RENDER_QUALITY.getName());
 		}
-		
 		if (showNamesButton.wasReleased()) {
 			Constants.SHOW_NAMES = !Constants.SHOW_NAMES;
 			showNamesButton.setText("Show Names: " + Constants.SHOW_NAMES);
 			settingsConfig.set("showNames", String.valueOf(Constants.SHOW_NAMES));
 		}
-
 		if (showFramesButton.wasReleased()) {
 			Constants.SHOW_FRAMES = !Constants.SHOW_FRAMES;
 			showFramesButton.setText("Show Frames: " + Constants.SHOW_FRAMES);
 			settingsConfig.set("showFrames", String.valueOf(Constants.SHOW_FRAMES));
+		}
+		if (arrowControlsButton.wasReleased()) {
+			Constants.ARROW_CONTROLS = !Constants.ARROW_CONTROLS;
+			arrowControlsButton.setText("Arrow Controls: " + Constants.ARROW_CONTROLS);
+			settingsConfig.set("arrowControls", String.valueOf(Constants.ARROW_CONTROLS));
 		}
 	}
 
@@ -111,8 +117,8 @@ public class SettingsMenu extends Menu {
 		hud.drawText("Note: The actual quality depends on your hardware", 30, 150 + Constants.MAIN_MENU_SMALL_FONT.getSize(), Color.RED, Constants.MAIN_MENU_SMALL_FONT, TextAlignment.LEFT);
 		
 		hud.draw(showNamesButton);
-		
 		hud.draw(showFramesButton);
+		hud.draw(arrowControlsButton);
 		
 		exitButton.setY((int) (hud.getHeight() - exitButton.getHeight() - 30));
 		hud.draw(exitButton);

@@ -32,4 +32,7 @@ public class Constants {
 	public static double ROAD_AI_WIDTH = 0.8;
 	
 	public static Color MINIMAP_COLOR = Graph.getColor(255, 255, 255, 127);
+	
+	public static Controls CONTROLS;
+	public static boolean ARROW_CONTROLS;
 }

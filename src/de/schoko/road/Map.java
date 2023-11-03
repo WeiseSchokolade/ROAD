@@ -1,5 +1,8 @@
 package de.schoko.road;
 
+import de.schoko.road.geometry.CatmullRomSpline;
+import de.schoko.road.geometry.Vector2D;
+
 public class Map {
 	public static final int VERSION = 1;
 	public static final String FILE_EXTENSION = ".map";

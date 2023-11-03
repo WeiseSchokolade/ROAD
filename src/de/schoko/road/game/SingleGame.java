@@ -12,11 +12,12 @@ import de.schoko.rendering.Image;
 import de.schoko.rendering.ImageLocation;
 import de.schoko.rendering.Keyboard;
 import de.schoko.road.Constants;
+import de.schoko.road.Controls;
 import de.schoko.road.GameComplete;
 import de.schoko.road.Map;
 import de.schoko.road.Menu;
 import de.schoko.road.RoadProject;
-import de.schoko.road.Vector2D;
+import de.schoko.road.geometry.Vector2D;
 import de.schoko.road.layers.RoadLayer;
 import de.schoko.road.server.shared.SharedConstants;
 
@@ -56,6 +57,13 @@ public class SingleGame extends Menu {
 		context.getSettings().setBackgroundColor(2, 148, 0);
 
 		roadLayer.setContext(getContext());
+		Constants.CONTROLS = new Controls(context.getKeyboard());
+		if (Constants.ARROW_CONTROLS) {
+			Constants.CONTROLS.setTurnLeftKey(Keyboard.LEFT);
+			Constants.CONTROLS.setTurnRightKey(Keyboard.RIGHT);
+			Constants.CONTROLS.setDriveForwardsKey(Keyboard.UP);
+			Constants.CONTROLS.setDriveBackwardsKey(Keyboard.DOWN);
+		}
 		
 		lights = new Image[5];
 		lights[0] = context.getImagePool().getImage("light_0", Constants.RESOURCE_PATH + "light_0.png", ImageLocation.JAR);
@@ -79,6 +87,8 @@ public class SingleGame extends Menu {
 	public void update(double deltaTime) {
 		Camera camera = getContext().getCamera();
 		Keyboard keyboard = getContext().getKeyboard();
+		
+		Constants.CONTROLS.update();
 		
 		if (Constants.DEV_ACCESS) {
 			if (keyboard.wasRecentlyPressed(Keyboard.F1)) {

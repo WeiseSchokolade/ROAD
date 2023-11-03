@@ -1,39 +1,37 @@
 package de.schoko.road.game;
 
 import de.schoko.rendering.Context;
-import de.schoko.rendering.Keyboard;
 import de.schoko.road.Constants;
+import de.schoko.road.Controls;
 import de.schoko.road.layers.RoadLayer;
 
 public class PlayerCar extends Car {
-	private Context context;
+	private Controls controls;
 	private double maxRotationSpeed = 120;
 	
 	public PlayerCar(Context context, RoadLayer roadLayer) {
 		super(Constants.PLAYER_NAME, context, roadLayer, Constants.CAR_MODEL, 10, 20);
-		this.context = context;
+		this.controls = Constants.CONTROLS;
 	}
 	
 	@Override
 	public void updateControls(double deltaTime) {
-		Keyboard keyboard = context.getKeyboard();
-		
 		if (hasCompleted()) {
 			rotationSpeed = 0;
 			return;
 		}
 		
-		if (keyboard.isPressed(Keyboard.A, Keyboard.LEFT)) {
+		if (controls.isTurnLeft()) {
 			rotationSpeed = maxRotationSpeed;
-		} else if (keyboard.isPressed(Keyboard.D, Keyboard.RIGHT)) {
+		} else if (controls.isTurnRight()) {
 			rotationSpeed = -maxRotationSpeed;
 		} else {
 			rotationSpeed = 0;
 		}
 		
-		if (keyboard.isPressed(Keyboard.W, Keyboard.UP)) {
+		if (controls.isDriveForwards()) {
 			acceleration = maxAcceleration;
-		} else if (keyboard.isPressed(Keyboard.S, Keyboard.DOWN)) {
+		} else if (controls.isDriveBackwards()) {
 			acceleration = -maxAcceleration;
 		} else {
 			acceleration = 0;

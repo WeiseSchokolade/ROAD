@@ -104,6 +104,10 @@ public class RoadProject extends Renderer {
 			if (port != null) {
 				Constants.SERVER_PORT = Integer.valueOf(port);
 			}
+			String arrowControls = config.get("arrowControls");
+			if (arrowControls != null) {
+				Constants.ARROW_CONTROLS = Boolean.valueOf(arrowControls);
+			}
 		} else {
 			System.err.println("Couldn't load settings.txt");
 		}
