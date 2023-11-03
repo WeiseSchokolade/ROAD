@@ -40,6 +40,10 @@ public class ServerStarter {
 			}
 		}
 		String[] maps = dirFile.list();
+		for (int i = 0; i < maps.length; i++) {
+			maps[i] = maps[i].substring(0, maps[i].length() - ".map".length());
+			
+		}
 		System.out.print("Maps: ");
 		for (int i = 0; i < maps.length; i++) {
 			System.out.print(maps[i]);
