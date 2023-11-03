@@ -1,7 +1,6 @@
 package de.schoko.road.server;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -16,14 +15,14 @@ import de.schoko.road.server.shared.packets.Packet;
 import de.schoko.serverbase.Application;
 import de.schoko.serverbase.Server;
 import de.schoko.serverbase.core.Connection;
+import de.schoko.utility.Logging;
 
 public class ServerLobby extends Application {
 	private Server server;
+	private ArrayList<Room> rooms;
 	private ArrayList<LobbyConnection> connections;
-	private HashMap<String, MapStatus> maps;
 	private String[] mapNames;
-	
-	
+
 	/**
 	 * Time in milliseconds until client gets disconnected if no header is sent.
 	 */
@@ -33,27 +32,27 @@ public class ServerLobby extends Application {
 		super("Road Server Lobby", false);
 		this.server = server;
 		this.mapNames = mapNames;
+		rooms = new ArrayList<>();
 		connections = new ArrayList<>();
-		maps = new HashMap<>();
-		for (int i = 0; i < mapNames.length; i++) {
-			maps.put(mapNames[i], new MapStatus(mapNames[i]));
-		}
 	}
-	
+
 	@Override
 	public void update(double deltaTimeMS) {
-		Gson gson = Packet.getGson();
+		Gson gson = new Gson();
 		long currentTime = System.currentTimeMillis();
+
 		for (int i = 0; i < connections.size(); i++) {
 			LobbyConnection connection = connections.get(i);
 			if (!connection.hasSentHeader() && currentTime > connection.getConnectionTime() + CLIENT_TIMEOUT_UNTIL_HEADER) {
+				// Connection is deemed not a ROAD Program and no disconnection packet is sent
+				// because it's not expected that the client will understand it.
+				Logging.logError("Client timeouted: " + connection.getConnection().getUID());
 				connection.close();
-				continue;
 			}
 			if (connection.isClosed()) {
 				connections.remove(i);
 				i--;
-				if (connection.getMap() != null) sendMapUpdate(connection.getMap());
+				Logging.logInfo("Client disconnected: " + connection.getConnection().getUID());
 				continue;
 			}
 			String read = connection.read();
@@ -79,76 +78,70 @@ public class ServerLobby extends Application {
 						connection.close();
 						break;
 					}
-					System.out.println("Connection: " + read);
+					Logging.logInfo("New Connection: " + read);
 					connection.setSentHeader(true);
 					connection.setVersion(p0.version);
 					connection.setName(p0.name);
-					connection.setMap(p0.map);
-					if (mapExists(p0.map)) {
-						MapStatus map = maps.get(p0.map);
-						map.addPlayer(connection);
-						sendMapUpdate(connection.getMap());
-					} else {
-						connection.send(new DisconnectionPacket(DisconnectionReason.ILLEGAL_VALUE, "map"));
+					addToRoom(connection);
+					break;
+				case "LobbyReadyPacket":
+					if (!connection.hasSentHeader()) {
+						connection.send(new DisconnectionPacket(DisconnectionReason.ILLEGAL_ACTION, "MissingHeader"));
 						connection.close();
 						break;
 					}
-					break;
-				case "LobbyReadyPacket":
 					LobbyReadyPacket p1 = gson.fromJson(read, LobbyReadyPacket.class);
 					connection.setReady(p1.ready);
-					sendMapUpdate(connection.getMap());
 					break;
 				default:
-					System.out.println("Unknown packet: " + defaultPacket.getType());
+					Logging.logInfo("Unknown packet: " + defaultPacket.getType());
 					break;
 				}
 			} catch (JsonSyntaxException e) {
-				System.out.println("Couldn't parse JSON: " + read);
+				Logging.logError("Couldn't parse JSON: " + read);
 				e.printStackTrace();
 			}
 		}
-		maps.values().forEach((mapStatus) -> {
-			mapStatus.update();
-			if (mapStatus.isReady()) {
-				String[] playerNames = mapStatus.getPlayerNames();
-				ArrayList<LobbyConnection> readyPlayers = mapStatus.getReadyPlayers();
-				Game game = new Game(server, mapStatus.loadData(), playerNames);
-				for (int i = 0; i < readyPlayers.size(); i++) {
-					connections.remove(readyPlayers.get(i));
-					game.addConnection(readyPlayers.get(i).getConnection());
-				}
-				System.out.println("Starting new game");
+		for (int i = 0; i < rooms.size(); i++) {
+			Room room = rooms.get(i);
+			room.update();
+			if (room.isReady()) {
+				rooms.remove(i);
+				i--;
+				String[] playerNames = room.getPlayerNames();
+				ArrayList<LobbyConnection> players = room.getConnections();
+				Game game = new Game(server, room.getMap(), playerNames);
+				players.forEach((connection) -> {
+					connections.remove(connection);
+					game.addConnection(connection.getConnection());
+				});
+				Logging.logInfo("Starting new game");
 				server.startApplication(game);
 			}
-		});
+		}
 	}
-	
-	public boolean mapExists(String map) {
-		for (int i = 0; i < mapNames.length; i++) {
-			if (mapNames[i].equals(map)) {
-				return true;
+
+	public void addToRoom(LobbyConnection connection) {
+		for (int i = 0; i < rooms.size(); i++) {
+			Room room = rooms.get(i);
+			if (room.hasSpace()) {
+				room.addConnection(connection);
+				return;
 			}
 		}
-		return false;
+		Room room = new Room(mapNames);
+		rooms.add(room);
+		room.addConnection(connection);
 	}
-	
-	public void sendMapUpdate(String mapName) {
-		MapStatus map = maps.get(mapName);
-		sendAllConnectionsWithMap(mapName, new LobbyStatusPacket(map.getReadyAmount(), map.getPlayerNames(), mapNames, connections.size()));
+
+	public void sendUpdate(LobbyConnection connection) {
+		connection.send(new LobbyStatusPacket(0, mapNames, mapNames, 0));
 	}
-	
-	public void sendAllConnectionsWithMap(String mapSelection, Packet packet) {
-		connections.forEach((connection) -> {
-			if (connection.getMap().equals(mapSelection)) {
-				connection.send(packet);
-			}
-		});
-	}
-	
+
 	@Override
 	public void addConnection(Connection connection) {
 		super.addConnection(connection);
 		connections.add(new LobbyConnection(connection));
 	}
+
 }

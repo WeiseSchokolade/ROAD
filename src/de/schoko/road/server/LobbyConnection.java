@@ -11,8 +11,8 @@ public class LobbyConnection {
 	
 	private int version;
 	private String name;
-	private String map;
 	private boolean ready;
+	private Room room;
 	
 	public LobbyConnection(Connection connection) {
 		this.connectionTime = System.currentTimeMillis();
@@ -55,8 +55,8 @@ public class LobbyConnection {
 		return name;
 	}
 	
-	public String getMap() {
-		return map;
+	public Room getRoom() {
+		return room;
 	}
 	
 	public boolean isReady() {
@@ -75,12 +75,12 @@ public class LobbyConnection {
 		this.name = name;
 	}
 	
-	public void setMap(String map) {
-		this.map = map;
-	}
-	
 	public void setReady(boolean ready) {
 		this.ready = ready;
+	}
+	
+	public void setRoom(Room room) {
+		this.room = room;
 	}
 	
 	public Connection getConnection() {
