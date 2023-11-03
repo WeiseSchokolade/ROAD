@@ -9,7 +9,7 @@ import de.schoko.rendering.ImageLocation;
 import de.schoko.rendering.TextAlignment;
 import de.schoko.road.CarModel;
 import de.schoko.road.Constants;
-import de.schoko.road.Vector2D;
+import de.schoko.road.geometry.Vector2D;
 import de.schoko.road.layers.RoadLayer;
 
 public abstract class Car extends Entity {

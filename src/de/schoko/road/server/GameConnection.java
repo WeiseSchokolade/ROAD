@@ -1,6 +1,6 @@
 package de.schoko.road.server;
 
-import de.schoko.road.Vector2D;
+import de.schoko.road.geometry.Vector2D;
 import de.schoko.road.server.shared.packets.Packet;
 import de.schoko.serverbase.core.Connection;
 

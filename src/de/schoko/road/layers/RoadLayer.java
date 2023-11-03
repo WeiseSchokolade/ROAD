@@ -10,10 +10,10 @@ import de.schoko.rendering.Context;
 import de.schoko.rendering.Graph;
 import de.schoko.rendering.HUDGraph;
 import de.schoko.rendering.Image;
-import de.schoko.road.CatmullRomSpline;
 import de.schoko.road.Constants;
 import de.schoko.road.RenderQuality;
-import de.schoko.road.Vector2D;
+import de.schoko.road.geometry.CatmullRomSpline;
+import de.schoko.road.geometry.Vector2D;
 
 public class RoadLayer extends Layer {
 	private CatmullRomSpline catmullRomSpline;

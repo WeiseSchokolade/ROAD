@@ -1,4 +1,4 @@
-package de.schoko.road;
+package de.schoko.road.geometry;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,4 @@
-package de.schoko.road;
+package de.schoko.road.geometry;
 
 public class Vector2D {
 	private double x;

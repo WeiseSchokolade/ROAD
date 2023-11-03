@@ -1,7 +1,7 @@
 package de.schoko.road.server.shared.packets;
 
-import de.schoko.road.Vector2D;
 import de.schoko.road.game.Car;
+import de.schoko.road.geometry.Vector2D;
 import de.schoko.road.server.GameConnection;
 
 public class CarInfoPacket extends Packet {

@@ -2,9 +2,9 @@ package de.schoko.road.game;
 
 import de.schoko.rendering.Context;
 import de.schoko.road.CarModel;
-import de.schoko.road.CatmullRomSpline;
 import de.schoko.road.Constants;
-import de.schoko.road.Vector2D;
+import de.schoko.road.geometry.CatmullRomSpline;
+import de.schoko.road.geometry.Vector2D;
 import de.schoko.road.layers.RoadLayer;
 
 public class EnemyCar extends Car {
