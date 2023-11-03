@@ -23,6 +23,8 @@ public class Constants {
 	
 	public static RenderQuality RENDER_QUALITY = RenderQuality.NORMAL;
 	
+	public static boolean RAINING = false;
+	
 	public static boolean SHOW_NAMES = true;
 	public static boolean DRAW_ROAD = true;
 	public static boolean SHOW_FRAMES = false;

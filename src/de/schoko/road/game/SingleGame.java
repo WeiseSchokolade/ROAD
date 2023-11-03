@@ -18,7 +18,9 @@ import de.schoko.road.Map;
 import de.schoko.road.Menu;
 import de.schoko.road.RoadProject;
 import de.schoko.road.geometry.Vector2D;
+import de.schoko.road.layers.Layer;
 import de.schoko.road.layers.RoadLayer;
+import de.schoko.road.layers.WeatherLayer;
 import de.schoko.road.server.shared.SharedConstants;
 
 public class SingleGame extends Menu {
@@ -26,7 +28,8 @@ public class SingleGame extends Menu {
 	private boolean single;
 	
 	private RoadLayer roadLayer;
-
+	private ArrayList<Layer> layers;
+	
 	private ArrayList<Car> cars;
 	
 	private Car playerCar;
@@ -47,6 +50,7 @@ public class SingleGame extends Menu {
 
 	public SingleGame(Map map, boolean single) {
 		this.map = map;
+		layers = new ArrayList<>();
 		cars = new ArrayList<>();
 		this.single = single;
 		roadLayer = new RoadLayer(map.getCatmullRomSpline());
@@ -56,7 +60,12 @@ public class SingleGame extends Menu {
 	public void onLoad(Context context) {
 		context.getSettings().setBackgroundColor(2, 148, 0);
 
-		roadLayer.setContext(getContext());
+		addLayer(roadLayer);
+		
+		if (Constants.RAINING) {
+			addLayer(new WeatherLayer());
+		}
+		
 		Constants.CONTROLS = new Controls(context.getKeyboard());
 		if (Constants.ARROW_CONTROLS) {
 			Constants.CONTROLS.setTurnLeftKey(Keyboard.LEFT);
@@ -89,6 +98,9 @@ public class SingleGame extends Menu {
 		Keyboard keyboard = getContext().getKeyboard();
 		
 		Constants.CONTROLS.update();
+		layers.forEach(layer -> {
+			layer.update(deltaTime);
+		});
 		
 		if (Constants.DEV_ACCESS) {
 			if (keyboard.wasRecentlyPressed(Keyboard.F1)) {
@@ -159,7 +171,9 @@ public class SingleGame extends Menu {
 		Graph g = new Graph(getContext().getWindow().getPanel(), graphics, getContext().getCamera(), getContext().getSettings(), getContext().getSettings().getGraphTransform(), getContext().getPanelSystem());
 		HUDGraph hud = ge.getHUD();
 		
-		roadLayer.draw(g);
+		layers.forEach(layer -> {
+			layer.draw(g);
+		});
 		
 		g.drawImage(goal, map.getEntry().getX(), map.getEntry().getY(), 2.9005);
 		
@@ -208,6 +222,11 @@ public class SingleGame extends Menu {
 		
 		this.cars.add(car);
 		car.onLoad();
+	}
+	
+	public void addLayer(Layer layer) {
+		this.layers.add(layer);
+		layer.setContext(getContext());
 	}
 	
 	public boolean isStarted() {
