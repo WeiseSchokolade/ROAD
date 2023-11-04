@@ -18,27 +18,32 @@ import de.schoko.road.server.shared.packets.HeaderPacket;
 import de.schoko.road.server.shared.packets.LobbyReadyPacket;
 import de.schoko.road.server.shared.packets.LobbyStatusPacket;
 import de.schoko.road.server.shared.packets.Packet;
+import de.schoko.road.server.shared.packets.VotePacket;
 
 public class ConnectionMenu extends Menu {
 	private Client client;
-	private String map;
 	private boolean ready;
 	private TextButton readyButton;
 	
 	private int readyAmount;
 	private int totalPlayerAmount;
 	private String[] mapPlayers;
+	private String[] maps;
+	private TextButton[] mapButtons;
+
+	private int oldSelectedMapIndex = -1;
 	
-	public ConnectionMenu(String map) {
-		this.map = map;
+	public ConnectionMenu() {
 		mapPlayers = new String[0];
+		maps = new String[0];
+		mapButtons = new TextButton[0];
 	}
 	
 	@Override
 	public void onLoad(Context context) {
 		try {
 			client = new Client(Constants.SERVER_IP, Constants.SERVER_PORT);
-			client.send(new HeaderPacket(SharedConstants.PROTOCOL_VERSION, SharedConstants.EDITION, Constants.PLAYER_NAME, Constants.CAR_MODEL.getImageName(), map));
+			client.send(new HeaderPacket(SharedConstants.PROTOCOL_VERSION, SharedConstants.EDITION, Constants.PLAYER_NAME, Constants.CAR_MODEL.getImageName()));
 		} catch (ConnectException e) {
 			System.out.println("Couldn't connect to server: " + e.getMessage());
 			RoadProject.get().setMenu(new MultiPlayerMenu("Couldn't connect to server. Check your ip/port in the settings."));
@@ -60,6 +65,12 @@ public class ConnectionMenu extends Menu {
 			readyButton.setText("Ready: " + ready);
 		}
 		
+		for (int i = 0; i < mapButtons.length; i++) {
+			if (mapButtons[i].wasReleased()) {
+				setSelected(i);
+			}
+		}
+		
 		String read = client.read();
 		if (read != null) {
 			Packet packet = Packet.getGson().fromJson(read, Packet.class);
@@ -69,6 +80,7 @@ public class ConnectionMenu extends Menu {
 				readyAmount = p0.readyAmount;
 				totalPlayerAmount = p0.totalPlayers;
 				mapPlayers = p0.players;
+				setMaps(p0.maps);
 				break;
 			case "GameStartPacket":
 				RoadProject.get().setMenu(new GameLoadMenu(client, Packet.getGson().fromJson(read, GameStartPacket.class)));
@@ -91,7 +103,11 @@ public class ConnectionMenu extends Menu {
 			hud.drawText("Game needs at least two players to start!", hud.getWidth() / 2, hud.getHeight() / 2 + readyButton.getHeight() + Constants.MAIN_MENU_SMALL_FONT.getSize(), Color.RED, Constants.MAIN_MENU_SMALL_FONT, TextAlignment.CENTER);
 		}
 		
-		hud.drawText("Map: " + map, (int) (hud.getWidth() / 2), 45, Color.RED, Constants.MAIN_MENU_FONT, TextAlignment.CENTER);
+		hud.drawText("Vote for Track", hud.getWidth() * 0.5, 120, Color.RED, Constants.MAIN_MENU_FONT, TextAlignment.CENTER);
+		for (int i = 0; i < mapButtons.length; i++) {
+			mapButtons[i].setX((int) (hud.getWidth() * 0.5), TextAlignment.CENTER);
+			hud.draw(mapButtons[i]);
+		}
 		
 		double playerListX = hud.getWidth() / 5;
 		hud.drawText("Players - Ready: " + readyAmount + "/" + mapPlayers.length, playerListX, 120, Color.RED, Constants.MAIN_MENU_FONT, TextAlignment.CENTER);
@@ -101,5 +117,32 @@ public class ConnectionMenu extends Menu {
 		
 		hud.drawText("Total Players: " + totalPlayerAmount, hud.getWidth() * 4 / 5, 120, Color.RED, Constants.MAIN_MENU_FONT, TextAlignment.CENTER);
 	}
-
+	
+	public void setMaps(String[] maps) {
+		this.maps = maps;
+		this.mapButtons = new TextButton[maps.length];
+		int buttonHeight = 0;
+		for (int i = 0; i < maps.length; i++) {
+			String text = maps[i];
+			if (i == oldSelectedMapIndex) {
+				text = "> " + text + " <";
+			}
+			TextButton button = new TextButton(getContext(), text, 0, 130 + i * buttonHeight, Color.RED, Constants.MAIN_MENU_FONT,
+				Constants.MAIN_MENU_BACKGROUND_COLOR, Constants.MAIN_MENU_BACKGROUND_COLOR, Color.WHITE, Color.LIGHT_GRAY);
+			mapButtons[i] = button;
+			buttonHeight = button.getHeight() + 5;
+		}
+	}
+	
+	private void setSelected(int index) {
+		TextButton newlySelectedButton = mapButtons[index];
+		if (oldSelectedMapIndex != -1) {
+			mapButtons[oldSelectedMapIndex].setText(maps[oldSelectedMapIndex]);
+		}
+		newlySelectedButton.setText("> " + maps[index] + " <");
+		if (oldSelectedMapIndex != index) {
+			oldSelectedMapIndex = index;
+			client.send(new VotePacket(maps[index]));
+		}
+	}
 }
