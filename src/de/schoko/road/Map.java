@@ -1,5 +1,7 @@
 package de.schoko.road;
 
+import java.awt.image.BufferedImage;
+
 import de.schoko.road.geometry.CatmullRomSpline;
 import de.schoko.road.geometry.Vector2D;
 
@@ -12,6 +14,8 @@ public class Map {
 	private String fileName;
 	private String name;
 	private String description;
+	private transient BufferedImage miniMapImage;
+	private transient BufferedImage mapImage;
 	
 	public Map() {
 		catmullRomSpline = new CatmullRomSpline();
@@ -48,5 +52,21 @@ public class Map {
 	
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
+	}
+
+	public BufferedImage getMapImage() {
+		return mapImage;
+	}
+	
+	public void setMapImage(BufferedImage mapImage) {
+		this.mapImage = mapImage;
+	}
+	
+	public BufferedImage getMiniMapImage() {
+		return miniMapImage;
+	}
+	
+	public void setMiniMapImage(BufferedImage miniMapImage) {
+		this.miniMapImage = miniMapImage;
 	}
 }

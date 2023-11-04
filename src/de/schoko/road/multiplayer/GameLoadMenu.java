@@ -6,17 +6,20 @@ import de.schoko.rendering.Graph;
 import de.schoko.rendering.HUDGraph;
 import de.schoko.rendering.TextAlignment;
 import de.schoko.road.Constants;
+import de.schoko.road.Map;
 import de.schoko.road.Maps;
 import de.schoko.road.Menu;
 import de.schoko.road.RoadProject;
 import de.schoko.road.game.PlayerCar;
 import de.schoko.road.game.RemoteCar;
 import de.schoko.road.game.SingleGame;
+import de.schoko.road.layers.RoadLayer;
 import de.schoko.road.server.shared.packets.GameStartPacket;
 
 public class GameLoadMenu extends Menu {
 	private Client client;
 	private GameStartPacket data;
+	private Map map;
 	
 	public GameLoadMenu(Client client, GameStartPacket data) {
 		this.client = client;
@@ -27,8 +30,13 @@ public class GameLoadMenu extends Menu {
 	
 	@Override
 	public void update(double deltaTime) {
+		if (System.currentTimeMillis() >= data.startTime - 9000 && map == null) {
+			map = Maps.loadMapFromData(data.mapData);
+			RoadLayer layer = new RoadLayer(map);
+			layer.onLoad(getContext());
+		}
 		if (System.currentTimeMillis() >= data.startTime - 6000) {
-			SingleGame game = new SingleGame(Maps.loadMapFromData(data.mapData), false);
+			SingleGame game = new SingleGame(map, false);
 			client.clear();
 			String[] players = data.players;
 			for (int i = 0; i < players.length; i++) {

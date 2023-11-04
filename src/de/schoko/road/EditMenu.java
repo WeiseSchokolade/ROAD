@@ -47,7 +47,7 @@ public class EditMenu extends Menu {
 		
 		Constants.DRAW_ROAD = false;
 		
-		roadLayer = new RoadLayer(catmullRomSpline);
+		roadLayer = new RoadLayer(map);
 		roadLayer.setContext(context);
 		
 		trackImage = new ImageFrame(-12.75, 4, context.getImagePool().getImage("track-1", "de/schoko/road/track 1.png", ImageLocation.JAR), 22.5);

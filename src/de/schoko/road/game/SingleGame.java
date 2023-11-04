@@ -52,7 +52,7 @@ public class SingleGame extends Menu {
 		layers = new ArrayList<>();
 		cars = new ArrayList<>();
 		this.single = single;
-		roadLayer = new RoadLayer(map.getCatmullRomSpline());
+		roadLayer = new RoadLayer(map);
 	}
 	
 	@Override

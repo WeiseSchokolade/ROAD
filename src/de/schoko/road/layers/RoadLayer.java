@@ -11,29 +11,38 @@ import de.schoko.rendering.Graph;
 import de.schoko.rendering.HUDGraph;
 import de.schoko.rendering.Image;
 import de.schoko.road.Constants;
+import de.schoko.road.Map;
 import de.schoko.road.RenderQuality;
 import de.schoko.road.geometry.CatmullRomSpline;
 import de.schoko.road.geometry.Vector2D;
+import de.schoko.utility.Logging;
 
 public class RoadLayer extends Layer {
 	private CatmullRomSpline catmullRomSpline;
 	private Image image;
-	private Image map;
+	private Image mapImage;
+	private Map map;
 	
-	public RoadLayer(CatmullRomSpline catmullRomSpline) {
-		this.catmullRomSpline = catmullRomSpline;
+	public RoadLayer(Map map) {
+		this.map = map;
+		this.catmullRomSpline = map.getCatmullRomSpline();
 	}
 	
 	@Override
 	public void onLoad(Context context) {
-		{
+		if (map.getMiniMapImage() != null) {
+			image = new Image("miniMap", map.getMiniMapImage());
+		} else {
 			BufferedImage bufferedImage = new BufferedImage(512, 512, BufferedImage.TYPE_INT_ARGB);
 			Graphics2D g2D = bufferedImage.createGraphics();
 			renderMinimap(g2D, 512, 512);
 			g2D.dispose();
+			map.setMiniMapImage(bufferedImage);
 			image = new Image("miniMap", bufferedImage);
 		}
-		{
+		if (map.getMapImage() != null) {
+			mapImage = new Image("map", map.getMapImage());
+		} else {
 			BufferedImage bufferedImage = new BufferedImage(16384, 16384, BufferedImage.TYPE_INT_ARGB);
 			Graphics2D g2D = bufferedImage.createGraphics();
 			RenderQuality oldQuality = Constants.RENDER_QUALITY;
@@ -41,7 +50,8 @@ public class RoadLayer extends Layer {
 			renderMap(g2D, 16384, 16384);
 			Constants.RENDER_QUALITY = oldQuality;
 			g2D.dispose();
-			map = new Image("map", bufferedImage);
+			map.setMapImage(bufferedImage);
+			mapImage = new Image("map", bufferedImage);
 		}
 	}
 	
@@ -54,7 +64,7 @@ public class RoadLayer extends Layer {
 	public void draw(Graph g) {
 		HUDGraph hud = g.getHUD();
 		hud.drawImage(hud.getWidth() - image.getWidth(), hud.getHeight() - image.getHeight(), image, 1);
-		g.drawImage(map, 0, 0, 150);
+		g.drawImage(mapImage, 0, 0, 150);
 	}
 	
 	public void renderMinimap(Graphics2D g2D, int width, int height) {
