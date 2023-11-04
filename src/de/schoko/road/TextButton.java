@@ -139,4 +139,8 @@ public class TextButton extends DrawCall {
 	public int getY() {
 		return y;
 	}
+	
+	public String getText() {
+		return text;
+	}
 }
