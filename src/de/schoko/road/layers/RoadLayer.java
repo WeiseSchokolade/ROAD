@@ -15,7 +15,6 @@ import de.schoko.road.Map;
 import de.schoko.road.RenderQuality;
 import de.schoko.road.geometry.CatmullRomSpline;
 import de.schoko.road.geometry.Vector2D;
-import de.schoko.utility.Logging;
 
 public class RoadLayer extends Layer {
 	private CatmullRomSpline catmullRomSpline;
