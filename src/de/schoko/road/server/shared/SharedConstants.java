@@ -17,7 +17,7 @@ public final class SharedConstants {
 	 *   </li>
 	 * </ul>
 	 */
-	public static final int PROTOCOL_VERSION = 5;
+	public static final int PROTOCOL_VERSION = 6;
 	
 	/**
 	 * Edition of the game. This should only be changed by modders and developers of forks.
