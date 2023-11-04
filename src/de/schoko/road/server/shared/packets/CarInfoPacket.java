@@ -80,6 +80,7 @@ public class CarInfoPacket extends Packet {
 		car.setSpeed(speed);
 		car.setRotationSpeed(rotationSpeed);
 		car.setSpeedVec(speedVec);
+		car.setAcceleration(acceleration);
 		car.setRound(round);
 		car.setProgress(progress);
 		car.setCompleted(completed);
