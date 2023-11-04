@@ -31,7 +31,7 @@ public class Game extends Application {
 		this.playerNames = playerNames;
 		this.mapData = mapData;
 		this.connections = new ArrayList<>();
-		startTime = System.currentTimeMillis() + 7000;
+		startTime = System.currentTimeMillis() + 10000;
 	}
 	
 	@Override
