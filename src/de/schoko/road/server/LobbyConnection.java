@@ -13,6 +13,7 @@ public class LobbyConnection {
 	private String name;
 	private boolean ready;
 	private Room room;
+	private String votedMap;
 	
 	public LobbyConnection(Connection connection) {
 		this.connectionTime = System.currentTimeMillis();
@@ -59,6 +60,10 @@ public class LobbyConnection {
 		return room;
 	}
 	
+	public String getVotedMap() {
+		return votedMap;
+	}
+	
 	public boolean isReady() {
 		return ready;
 	}
@@ -85,5 +90,9 @@ public class LobbyConnection {
 	
 	public Connection getConnection() {
 		return connection;
+	}
+
+	public void setVotedMap(String map) {
+		this.votedMap = map;
 	}
 }

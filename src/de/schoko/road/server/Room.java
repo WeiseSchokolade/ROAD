@@ -1,6 +1,7 @@
 package de.schoko.road.server;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import de.schoko.road.server.shared.packets.LobbyStatusPacket;
 
@@ -39,6 +40,7 @@ public class Room {
 	}
 	
 	public void addConnection(LobbyConnection connection) {
+		dirty = true;
 		connections.add(connection);
 		connection.setRoom(this);
 	}
@@ -48,6 +50,7 @@ public class Room {
 	}
 	
 	public boolean isReady() {
+		if (connections.size() < 2) return false;
 		for (int i = 0; i < connections.size(); i++) {
 			if (!connections.get(i).isReady()) return false;
 		}
@@ -65,7 +68,32 @@ public class Room {
 	}
 	
 	public String getMap() {
-		return "";
+		HashMap<String, Integer> maps = new HashMap<>();
+		for (String map : mapNames) {
+			maps.put(map, 0);
+		}
+		for (int i = 0; i < connections.size(); i++) {
+			LobbyConnection connection = connections.get(i);
+			String votedMap = connection.getVotedMap();
+			if (votedMap != null) {
+				maps.put(votedMap, maps.get(votedMap) + 1);
+			}
+		}
+		String[] highestMap = new String[] {mapNames[(int) Math.floor(Math.random() * mapNames.length)]};
+		int[] highestVotes = new int[] {0};
+		maps.forEach((map, votes) -> {
+			if (votes == highestVotes[0]) {
+				if (Math.random() < 0.5) {
+					highestMap[0] = map;
+				}
+			}
+			if (votes > highestVotes[0]) {
+				highestMap[0] = map;
+				highestVotes[0] = votes;
+				return;
+			}
+		});
+		return highestMap[0];
 	}
 
 	public String[] getPlayerNames() {

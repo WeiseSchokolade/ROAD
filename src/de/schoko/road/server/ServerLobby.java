@@ -1,10 +1,15 @@
 package de.schoko.road.server;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
+import de.schoko.road.Map;
 import de.schoko.road.server.shared.DisconnectionReason;
 import de.schoko.road.server.shared.SharedConstants;
 import de.schoko.road.server.shared.packets.DisconnectionPacket;
@@ -12,6 +17,7 @@ import de.schoko.road.server.shared.packets.HeaderPacket;
 import de.schoko.road.server.shared.packets.LobbyReadyPacket;
 import de.schoko.road.server.shared.packets.LobbyStatusPacket;
 import de.schoko.road.server.shared.packets.Packet;
+import de.schoko.road.server.shared.packets.VotePacket;
 import de.schoko.serverbase.Application;
 import de.schoko.serverbase.Server;
 import de.schoko.serverbase.core.Connection;
@@ -92,6 +98,16 @@ public class ServerLobby extends Application {
 					}
 					LobbyReadyPacket p1 = gson.fromJson(read, LobbyReadyPacket.class);
 					connection.setReady(p1.ready);
+					connection.getRoom().setDirty(true);
+					break;
+				case "VotePacket":
+					if (!connection.hasSentHeader()) {
+						connection.send(new DisconnectionPacket(DisconnectionReason.ILLEGAL_ACTION, "MissingHeader"));
+						connection.close();
+						break;
+					}
+					VotePacket p2 = gson.fromJson(read, VotePacket.class);
+					connection.setVotedMap(p2.map);
 					break;
 				default:
 					Logging.logInfo("Unknown packet: " + defaultPacket.getType());
@@ -110,7 +126,7 @@ public class ServerLobby extends Application {
 				i--;
 				String[] playerNames = room.getPlayerNames();
 				ArrayList<LobbyConnection> players = room.getConnections();
-				Game game = new Game(server, room.getMap(), playerNames);
+				Game game = new Game(server, loadMapData(room.getMap()), playerNames);
 				players.forEach((connection) -> {
 					connections.remove(connection);
 					game.addConnection(connection.getConnection());
@@ -134,6 +150,18 @@ public class ServerLobby extends Application {
 		room.addConnection(connection);
 	}
 
+	public String loadMapData(String mapName) {
+		String parentDir = "maps";
+		String path = parentDir + File.separator + mapName + Map.FILE_EXTENSION;
+		System.out.println("Loading Map: " + path);
+		try {
+			return Files.readString(Path.of(path));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 	public void sendUpdate(LobbyConnection connection) {
 		connection.send(new LobbyStatusPacket(0, mapNames, mapNames, 0));
 	}
