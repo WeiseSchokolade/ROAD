@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 import de.schoko.rendering.Context;
 import de.schoko.rendering.HUDGraph;
 import de.schoko.rendering.Image;
+import de.schoko.rendering.Mouse;
 import de.schoko.rendering.TextAlignment;
 import de.schoko.rendering.hud.DrawCall;
 
@@ -15,6 +16,7 @@ public class CarSelectionButton extends DrawCall {
 	private CarModel model;
 	private int carIndex;
 	private CarModel[] models;
+	private boolean mousePressed;
 	
 	public CarSelectionButton(Context context) {
 		this.context = context;
@@ -33,22 +35,43 @@ public class CarSelectionButton extends DrawCall {
 	@Override
 	public void call(Graphics2D g2D) {
 		HUDGraph hud = context.getLastGraph().getHUD();
+		Mouse mouse = context.getMouse();
 		
+		int axis = ((int) (hud.getWidth() * 0.75));
+		textButton.setX(axis, TextAlignment.CENTER);
+		textButton.setY((int) (hud.getHeight() / 2));
+
+		Image carImage = model.getImage(context);
+		double carImageX = axis - carImage.getWidth() * 0.5 * 8;
+		double carImageY = textButton.getY() + textButton.getHeight();
 		if (textButton.wasReleased()) {
-			carIndex++;
-			if (carIndex >= models.length) {
-				carIndex = 0;
+			nextCar();
+		}
+		if (mouse.isPressed(Mouse.LEFT_BUTTON)) {
+			mousePressed = true;
+		} else {
+			if (mousePressed) {
+				mousePressed = false;
+				if (mouse.getScreenX() > carImageX && mouse.getScreenY() > carImageY) {
+					if (mouse.getScreenX() < carImageX + carImage.getWidth() * 8 && mouse.getScreenY() < carImageY + carImage.getHeight() * 8) {
+						nextCar();
+					}
+				}
 			}
-			Constants.CAR_MODEL = models[carIndex];
-			model = models[carIndex];
-			textButton.setText("Car: " + model.getName());
 		}
 		
-		textButton.setX((int) ((2 * hud.getWidth()) / 3), TextAlignment.LEFT);
-		textButton.setY((int) (hud.getHeight() / 2));
 		hud.draw(textButton);
 
-		Image image = model.getImage(context);
-		hud.drawImage(textButton.getX(), textButton.getY() + textButton.getHeight(), image, 0.25);
+		hud.drawImage(carImageX, carImageY, carImage, 0.125);
+	}
+	
+	public void nextCar() {
+		carIndex++;
+		if (carIndex >= models.length) {
+			carIndex = 0;
+		}
+		Constants.CAR_MODEL = models[carIndex];
+		model = models[carIndex];
+		textButton.setText("Car: " + model.getName());
 	}
 }
