@@ -12,7 +12,6 @@ import de.schoko.rendering.HUDGraph;
 import de.schoko.rendering.Image;
 import de.schoko.road.Constants;
 import de.schoko.road.Map;
-import de.schoko.road.RenderQuality;
 import de.schoko.road.geometry.CatmullRomSpline;
 import de.schoko.road.geometry.Vector2D;
 import de.schoko.utility.TimeLogger;
