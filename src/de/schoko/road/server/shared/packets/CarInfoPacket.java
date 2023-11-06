@@ -16,6 +16,7 @@ public class CarInfoPacket extends Packet {
 	public boolean completed;
 	public long completeTime;
 	public String carImageName;
+	public long lastUpdate;
 	
 	public CarInfoPacket() {
 		
@@ -32,7 +33,8 @@ public class CarInfoPacket extends Packet {
 			double progress,
 			boolean completed,
 			long completeTime,
-			String carImageName) {
+			String carImageName,
+			long lastUpdate) {
 		this.pos = pos;
 		this.dir = dir;
 		this.speed = speed;
@@ -44,6 +46,7 @@ public class CarInfoPacket extends Packet {
 		this.completed = completed;
 		this.completeTime = completeTime;
 		this.carImageName = carImageName;
+		this.lastUpdate = lastUpdate;
 	}
 	
 	public CarInfoPacket(Car car) {
@@ -58,6 +61,7 @@ public class CarInfoPacket extends Packet {
 		completed = car.hasCompleted();
 		completeTime = car.getCompleteTime();
 		carImageName = car.getImageName();
+		lastUpdate = System.currentTimeMillis();
 	}
 	
 	public CarInfoPacket(GameConnection connection) {
@@ -72,6 +76,7 @@ public class CarInfoPacket extends Packet {
 		completed = connection.hasCompleted();
 		completeTime = connection.getCompleteTime();
 		carImageName = connection.getCarImageName();
+		lastUpdate = connection.getLastUpdate();
 	}
 	
 	public void apply(Car car) {
