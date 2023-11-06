@@ -43,6 +43,18 @@ public class SettingsMenu extends Menu {
 		context.getSettings().setRenderCoordinateSystem(false);
 
 		Config settingsConfig = RoadProject.get().getSettingsConfig();
+		String quality = settingsConfig.get("quality");
+		if (quality == null) {
+			currentQuality = 2;
+		} else {
+			RenderQuality[] values = RenderQuality.values();
+			for (int i = 0; i < values.length; i++) {
+				if (values[i].toString().equalsIgnoreCase(quality)) {
+					currentQuality = i;
+					break;
+				}
+			}
+		}
 		
 		PanelSystem panelSystem = context.getPanelSystem();
 		panelSystem.add(new TextInputBox(80, 280, Constants.SERVER_IP, 999, string -> {
