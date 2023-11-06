@@ -45,10 +45,7 @@ public class RoadLayer extends Layer {
 		} else {
 			BufferedImage bufferedImage = new BufferedImage(16384, 16384, BufferedImage.TYPE_INT_ARGB);
 			Graphics2D g2D = bufferedImage.createGraphics();
-			RenderQuality oldQuality = Constants.RENDER_QUALITY;
-			Constants.RENDER_QUALITY = RenderQuality.HIGH;
 			renderMap(g2D, 16384, 16384);
-			Constants.RENDER_QUALITY = oldQuality;
 			g2D.dispose();
 			map.setMapImage(bufferedImage);
 			mapImage = new Image("map", bufferedImage);
