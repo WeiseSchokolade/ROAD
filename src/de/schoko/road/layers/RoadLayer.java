@@ -15,6 +15,7 @@ import de.schoko.road.Map;
 import de.schoko.road.RenderQuality;
 import de.schoko.road.geometry.CatmullRomSpline;
 import de.schoko.road.geometry.Vector2D;
+import de.schoko.utility.TimeLogger;
 
 public class RoadLayer extends Layer {
 	private CatmullRomSpline catmullRomSpline;
@@ -61,9 +62,11 @@ public class RoadLayer extends Layer {
 
 	@Override
 	public void draw(Graph g) {
+		TimeLogger.start("roadDraw");
 		HUDGraph hud = g.getHUD();
 		hud.drawImage(hud.getWidth() - image.getWidth(), hud.getHeight() - image.getHeight(), image, 1);
 		g.drawImage(mapImage, 0, 0, 150);
+		TimeLogger.end("roadDraw");
 	}
 	
 	public void renderMinimap(Graphics2D g2D, int width, int height) {

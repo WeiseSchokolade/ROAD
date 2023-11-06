@@ -11,6 +11,7 @@ import de.schoko.road.server.shared.packets.CarInfoPacket;
 import de.schoko.road.server.shared.packets.GamePlayersUpdatePacket;
 import de.schoko.road.server.shared.packets.Packet;
 import de.schoko.serverbase.PacketReducer;
+import de.schoko.utility.TimeLogger;
 
 public class SingleGameWrapMenu extends Menu {
 	private SingleGame singleGame;
@@ -37,7 +38,8 @@ public class SingleGameWrapMenu extends Menu {
 	@Override
 	public void update(double deltaTime) {
 		singleGame.update(deltaTime);
-		
+
+		TimeLogger.start("wrapNetwork");
 		String read;
 		
 		while ((read = client.read()) != null) {
@@ -49,10 +51,11 @@ public class SingleGameWrapMenu extends Menu {
 					Car car = singleGame.getCars().get(i);
 					if (car instanceof PlayerCar) continue;
 					if (car instanceof RemoteCar remoteCar) {
-						p0.players[i].apply(remoteCar);
-						long sendTime = p0.players[i].lastUpdate;
+						CarInfoPacket p = p0.players[i];
+						p.apply(remoteCar);
+						long sendTime = p.lastUpdate;
 						long currentTime = System.currentTimeMillis();
-						double passedTime = (currentTime - sendTime) / 1000;
+						double passedTime = (currentTime - sendTime) / 1000.0;
 						if (passedTime < 100000) {
 							remoteCar.update(passedTime);
 						}
@@ -70,6 +73,7 @@ public class SingleGameWrapMenu extends Menu {
 		}
 		
 		packetReducer.send(Packet.toJson(new CarInfoPacket(singleGame.getPlayerCar())), deltaTime * 1000);
+		TimeLogger.end("wrapNetwork");
 	}
 
 	@Override

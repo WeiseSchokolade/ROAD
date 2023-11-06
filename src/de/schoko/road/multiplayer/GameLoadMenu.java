@@ -35,6 +35,7 @@ public class GameLoadMenu extends Menu {
 			RoadLayer layer = new RoadLayer(map);
 			layer.onLoad(getContext());
 		}
+		client.read();
 		if (System.currentTimeMillis() >= data.startTime - 6000) {
 			SingleGame game = new SingleGame(map, false);
 			client.clear();

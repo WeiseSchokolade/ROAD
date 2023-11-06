@@ -1,5 +1,6 @@
 package de.schoko.road;
 
+import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
 
@@ -14,6 +15,7 @@ import de.schoko.rendering.Window;
 import de.schoko.saving.config.Config;
 import de.schoko.saving.config.ConfigSettings;
 import de.schoko.saving.config.ResourceLocation;
+import de.schoko.utility.TimeLogger;
 
 public class RoadProject extends Renderer {
 	public static void main(String[] args) {
@@ -154,6 +156,11 @@ public class RoadProject extends Renderer {
 			currentTime = System.currentTimeMillis();
 			
 			g.getHUD().drawText("FPS: " + fps, g.getHUD().getWidth() - 5, 30, Graph.getColor(255, 255, 255), Constants.MAIN_MENU_FONT, TextAlignment.RIGHT);
+			
+			g.getHUD().drawRect(0, 0, 300, 500, Color.WHITE);
+			TimeLogger.getKeys().forEach(key -> {
+				g.addDebugString("" + key + " Time: " + TimeLogger.getTime(key));
+			});
 		}
 	}
 	
