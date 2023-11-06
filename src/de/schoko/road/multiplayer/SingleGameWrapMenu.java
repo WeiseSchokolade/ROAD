@@ -50,10 +50,12 @@ public class SingleGameWrapMenu extends Menu {
 					if (car instanceof PlayerCar) continue;
 					if (car instanceof RemoteCar remoteCar) {
 						p0.players[i].apply(remoteCar);
-						long sendTime = p0.getSendTime();
+						long sendTime = p0.players[i].lastUpdate;
 						long currentTime = System.currentTimeMillis();
 						double passedTime = (currentTime - sendTime) / 1000;
-						remoteCar.update(passedTime);
+						if (passedTime < 100000) {
+							remoteCar.update(passedTime);
+						}
 					}
 				}
 				break;

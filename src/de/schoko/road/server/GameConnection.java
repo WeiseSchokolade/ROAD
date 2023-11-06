@@ -25,6 +25,8 @@ public class GameConnection {
 	private String name;
 	private String map;
 
+	private long lastUpdate;
+
 	public GameConnection(Connection connection, int id) {
 		this.connection = connection;
 		this.id = id;
@@ -173,7 +175,15 @@ public class GameConnection {
 		this.carImageName = carImageName;
 	}
 	
+	public void setLastUpdate(long lastUpdate) {
+		this.lastUpdate = lastUpdate;
+	}
+	
 	public Connection getConnection() {
 		return connection;
+	}
+
+	public long getLastUpdate() {
+		return lastUpdate;
 	}
 }

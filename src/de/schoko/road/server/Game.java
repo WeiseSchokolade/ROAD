@@ -60,6 +60,7 @@ public class Game extends Application {
 						connection.setProgress(p0.progress);
 						connection.setCompleted(p0.completed);
 						connection.setCompleteTime(p0.completeTime);
+						connection.setLastUpdate(p0.lastUpdate);
 						if (imageExists(p0.carImageName)) {
 							connection.setCarImageName(p0.carImageName);
 						}
