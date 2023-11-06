@@ -50,6 +50,7 @@ public class RoadProject extends Renderer {
 		Image image = new Image("icon", ImageLocation.JAR.getImage(Constants.RESOURCE_PATH + "car_yellow.png"));
 		settings.setWindowIcon(image);
 		settings.setMaximizedByDefault(true);
+		settings.setFPSCap(0);
 		
 		window.open();
 	}
