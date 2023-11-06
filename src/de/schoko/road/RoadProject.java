@@ -128,6 +128,7 @@ public class RoadProject extends Renderer {
 		
 		long currentTime = 0;
 		if (Constants.SHOW_FRAMES) {
+			g.addDebugString("currentTimeMillis: " + System.currentTimeMillis());
 			second -= deltaTimeMS;
 			if (second < 0) {
 				second += 1000;
