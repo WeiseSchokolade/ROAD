@@ -20,7 +20,7 @@ public class Game extends Application {
 	};
 	private String mapData;
 	private String[] playerNames;
-	
+
 	private long startTime;
 	private boolean started;
 
@@ -33,7 +33,7 @@ public class Game extends Application {
 		this.connections = new ArrayList<>();
 		startTime = System.currentTimeMillis() + 10000;
 	}
-	
+
 	@Override
 	public void update(double deltaTimeMS) {
 		if (System.currentTimeMillis() >= startTime && !started) {
@@ -42,52 +42,57 @@ public class Game extends Application {
 		}
 		for (int i = 0; i < connections.size(); i++) {
 			GameConnection connection = connections.get(i);
-			String read = connection.read();
-			if (read == null) continue;
-			try {
-				Packet packet = Packet.getGson().fromJson(read, Packet.class);
-				switch (packet.getType()) {
-				case "CarInfoPacket":
-					CarInfoPacket p0 = Packet.getGson().fromJson(read, CarInfoPacket.class);
-					if (started) {
-						connection.setPos(p0.pos);
-						connection.setDir(p0.dir);
-						connection.setSpeed(p0.speed);
-						connection.setRotationSpeed(p0.rotationSpeed);
-						connection.setSpeedVec(p0.speedVec);
-						connection.setAcceleration(p0.acceleration);
-						connection.setRound(p0.round);
-						connection.setProgress(p0.progress);
-						connection.setCompleted(p0.completed);
-						connection.setCompleteTime(p0.completeTime);
-						connection.setLastUpdate(p0.lastUpdate);
-						if (imageExists(p0.carImageName)) {
-							connection.setCarImageName(p0.carImageName);
-						}
-					} else {
-						connection.setPos(p0.pos);
-						if (imageExists(p0.carImageName)) {
-							connection.setCarImageName(p0.carImageName);
-						}
-						connection.send(new CarInfoPacket(connection));
-					}
-					break;
-				default:
-					System.out.println("Unknown packet: " + read);
-					break;
-				}
-			} catch (JsonSyntaxException e) {
-				System.out.println("Couldn't read json: " + read);
+			String read;
+			while ((read = connection.read()) != null) {
+				handlePacket(connection, read);
 			}
 		}
-		
+
 		CarInfoPacket[] infoPacket = new CarInfoPacket[connections.size()];
 		for (int i = 0; i < infoPacket.length; i++) {
 			infoPacket[i] = new CarInfoPacket(connections.get(i));
 		}
 		sendAll(Packet.toJson(new GamePlayersUpdatePacket(infoPacket)));
 	}
-	
+
+	public void handlePacket(GameConnection connection, String read) {
+		try {
+			Packet packet = Packet.getGson().fromJson(read, Packet.class);
+			switch (packet.getType()) {
+			case "CarInfoPacket":
+				CarInfoPacket p0 = Packet.getGson().fromJson(read, CarInfoPacket.class);
+				if (started) {
+					connection.setPos(p0.pos);
+					connection.setDir(p0.dir);
+					connection.setSpeed(p0.speed);
+					connection.setRotationSpeed(p0.rotationSpeed);
+					connection.setSpeedVec(p0.speedVec);
+					connection.setAcceleration(p0.acceleration);
+					connection.setRound(p0.round);
+					connection.setProgress(p0.progress);
+					connection.setCompleted(p0.completed);
+					connection.setCompleteTime(p0.completeTime);
+					connection.setLastUpdate(p0.lastUpdate);
+					if (imageExists(p0.carImageName)) {
+						connection.setCarImageName(p0.carImageName);
+					}
+				} else {
+					connection.setPos(p0.pos);
+					if (imageExists(p0.carImageName)) {
+						connection.setCarImageName(p0.carImageName);
+					}
+					connection.send(new CarInfoPacket(connection));
+				}
+				break;
+			default:
+				System.out.println("Unknown packet: " + read);
+				break;
+			}
+		} catch (JsonSyntaxException e) {
+			System.out.println("Couldn't read json: " + read);
+		}
+	}
+
 	public boolean imageExists(String image) {
 		for (int i = 0; i < KNOWN_IMAGES.length; i++) {
 			if (KNOWN_IMAGES[i].equals(image)) {
@@ -96,8 +101,8 @@ public class Game extends Application {
 		}
 		return false;
 	}
-	
-	
+
+
 	@Override
 	public void addConnection(Connection connection) {
 		super.addConnection(connection);
