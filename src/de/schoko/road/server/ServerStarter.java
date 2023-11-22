@@ -20,6 +20,7 @@ import de.schoko.serverbase.ext.ConsoleCommandManager;
 public class ServerStarter {
 	public static void main(String[] args) {
 		int port = 5555;
+		int tps = 200;
 		
 		ResourceCopy resourceCopy = new ResourceCopy();
 		
@@ -62,6 +63,12 @@ public class ServerStarter {
 			} else {
 				settings.set("port", "" + port);
 			}
+			String enteredTPS = settings.get("tps");
+			if (enteredTPS != null) {
+				tps = Integer.valueOf(enteredTPS);
+			} else {
+				settings.set("tps", "" + tps);
+			}
 		} else {
 			System.err.println("Couldn't load config!");
 		}
@@ -87,7 +94,7 @@ public class ServerStarter {
 				System.out.println("New Connection: " + connection.getUID());
 				thread.getApplication().addConnection(connection);
 			}
-		}, 20);
+		}, tps);
 		ConsoleCommandManager consoleManager = new ConsoleCommandManager();
 		consoleManager.registerCommand("stop", (arguments) -> {
 			System.exit(0);
@@ -127,9 +134,11 @@ public class ServerStarter {
 			}
 		});
 		final int finalPort = port;
+		final int finalTPS = tps;
 		consoleManager.registerCommand("info", arguments -> {
 			System.out.println(" ----- Server Information -----");
 			System.out.println("Port: " + finalPort);
+			System.out.println("Goal TPS: " + finalTPS);
 			System.out.println("Application Threads: " + server.getApplicationThreads());
 			System.out.println("Connections: " + server.getConnections().size());
 			System.out.println(" ----- Server Information -----");
