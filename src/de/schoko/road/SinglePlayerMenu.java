@@ -6,7 +6,7 @@ import de.schoko.rendering.Context;
 import de.schoko.rendering.Graph;
 import de.schoko.rendering.HUDGraph;
 import de.schoko.rendering.TextAlignment;
-import de.schoko.road.game.SingleGame;
+import de.schoko.road.game.SingleGameMenu;
 import de.schoko.road.server.shared.SharedConstants;
 
 public class SinglePlayerMenu extends Menu {
@@ -33,7 +33,7 @@ public class SinglePlayerMenu extends Menu {
 	@Override
 	public void update(double deltaTime) {
 		if (playButton.wasReleased()) {
-			RoadProject.get().setMenu(new SingleGame(Maps.loadMap(SharedConstants.MAP_NAMES[currentMap]), true));
+			RoadProject.get().setMenu(new SingleGameMenu(Maps.loadMap(SharedConstants.MAP_NAMES[currentMap])));
 			return;
 		}
 		if (Constants.DEV_ACCESS && editButton.wasReleased()) {

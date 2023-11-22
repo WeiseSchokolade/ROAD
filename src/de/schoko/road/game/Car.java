@@ -19,15 +19,17 @@ public abstract class Car extends Entity {
 	private String name;
 	private Color color;
 	private Color fadedColor;
-	private Vector2D pos;
-	protected double maxAcceleration;
-	protected double acceleration;
-	private double maxSpeed;
-	private Vector2D speedVec;
-	private double speed;
 	
-	protected double rotationSpeed;
+	protected Vector2D pos;
 	private Vector2D dir;
+	private double speed;
+	protected double rotationSpeed;
+	private Vector2D speedVec;
+	protected double acceleration;
+	
+	private double maxSpeed;
+	protected double maxAcceleration;
+	
 	
 	private int round;
 	private boolean completed;

@@ -29,6 +29,7 @@ public class RoadLayer extends Layer {
 	
 	@Override
 	public void onLoad(Context context) {
+		TimeLogger.start("RoadRender");
 		if (map.getMiniMapImage() != null) {
 			image = new Image("miniMap", map.getMiniMapImage());
 		} else {
@@ -49,6 +50,7 @@ public class RoadLayer extends Layer {
 			map.setMapImage(bufferedImage);
 			mapImage = new Image("map", bufferedImage);
 		}
+		TimeLogger.end("RoadRender");
 	}
 	
 	@Override

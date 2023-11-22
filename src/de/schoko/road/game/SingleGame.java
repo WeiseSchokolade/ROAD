@@ -12,16 +12,15 @@ import de.schoko.rendering.Image;
 import de.schoko.rendering.ImageLocation;
 import de.schoko.rendering.Keyboard;
 import de.schoko.road.Constants;
-import de.schoko.road.GameComplete;
 import de.schoko.road.Map;
 import de.schoko.road.Menu;
-import de.schoko.road.RoadProject;
 import de.schoko.road.geometry.Vector2D;
 import de.schoko.road.layers.Layer;
 import de.schoko.road.layers.RoadLayer;
 import de.schoko.road.layers.WeatherLayer;
 import de.schoko.road.server.shared.SharedConstants;
 
+@Deprecated
 public class SingleGame extends Menu {
 	private Map map;
 	private boolean single;
@@ -120,8 +119,9 @@ public class SingleGame extends Menu {
 					}
 				}
 				if (unfinishedCarAmount < 1) {
-					RoadProject.get().setMenu(new GameComplete(this));
-					return;
+					throw new UnsupportedOperationException("GameComplete Menu cannot be opened using this");
+					//RoadProject.get().setMenu(new GameComplete(this));
+					//return;
 				}
 			} else {
 				carCamera = false;

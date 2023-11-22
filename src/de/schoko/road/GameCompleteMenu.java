@@ -2,23 +2,28 @@ package de.schoko.road;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.util.ArrayList;
+import java.util.List;
 
 import de.schoko.rendering.Context;
 import de.schoko.rendering.Graph;
 import de.schoko.rendering.HUDGraph;
 import de.schoko.rendering.TextAlignment;
 import de.schoko.road.game.Car;
-import de.schoko.road.game.SingleGame;
+import de.schoko.road.game.CoreGame;
+import de.schoko.road.game.PlayerCar;
 
-public class GameComplete extends Menu {
-	private ArrayList<Car> carList;
+public class GameCompleteMenu extends Menu {
+	private List<Car> carList;
 	private Car[] cars;
-	private SingleGame game;
+	private CoreGame game;
 	private TextButton mainMenuButton;
+	private long startTimeStamp;
+	private PlayerCar playerCar;
 	
-	public GameComplete(SingleGame game) {
-		this.game = game;
+	public GameCompleteMenu(CoreGame coreGame, long startTimeStamp) {
+		this.playerCar = coreGame.getPlayerCar();
+		this.startTimeStamp = startTimeStamp;
+		this.game = coreGame;
 		carList = game.getCars();
 	}
 	
@@ -51,16 +56,16 @@ public class GameComplete extends Menu {
 		int fontSize = font.getSize();
 		for (int i = 0; i < cars.length; i++) {
 			Car car = cars[i];
-			long delta = car.getCompleteTime() - game.getStartTimestamp();
+			long delta = car.getCompleteTime() - startTimeStamp;
 			int y = baseY + i * fontSize;
 			hud.drawText("" + (i + 1) + ". " + car.getName(), hud.getWidth() / 2 - 250, y, car.getColor(), font);
 			hud.drawText("" + convert(delta), hud.getWidth() / 2 + 250, y, car.getColor(), font, TextAlignment.RIGHT);
 		}
-		int place = (this.carList.indexOf(game.getPlayerCar()) + 1);
+		int place = (this.carList.indexOf(playerCar) + 1);
 		hud.drawText("> ", hud.getWidth() / 2 - 250, baseY + (place - 1) * fontSize, Color.WHITE, font, TextAlignment.RIGHT);
 		
 		hud.drawText("You reached " + place + ". place!", hud.getWidth() / 2, 150, Color.WHITE, font, TextAlignment.CENTER);
-		hud.drawText("Your time is " + convert(game.getPlayerCar().getCompleteTime() - game.getStartTimestamp()), hud.getWidth() / 2, 150 + fontSize, Color.WHITE, font, TextAlignment.CENTER);
+		hud.drawText("Your time is " + convert(playerCar.getCompleteTime() - startTimeStamp), hud.getWidth() / 2, 150 + fontSize, Color.WHITE, font, TextAlignment.CENTER);
 		
 		mainMenuButton.setX((int) (hud.getWidth() / 2), TextAlignment.CENTER);
 		mainMenuButton.setY((int) (hud.getHeight() - mainMenuButton.getHeight() - 8));
