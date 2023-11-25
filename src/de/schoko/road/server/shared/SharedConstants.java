@@ -3,7 +3,6 @@ package de.schoko.road.server.shared;
 import java.awt.Color;
 
 import de.schoko.rendering.Graph;
-import de.schoko.road.game.SingleGame;
 
 public final class SharedConstants {
 	/**
@@ -25,7 +24,7 @@ public final class SharedConstants {
 	public static final String EDITION = "Vanilla";
 	
 	/**
-	 * Order of the colors of cars when added to {@link SingleGame}.
+	 * Order of the colors of cars when added to {@link de.schoko.road.game.CoreGame}.
 	 */
 	public static final Color[] COLOR_ORDER = {
 			Graph.getColor(0, 0, 255),
