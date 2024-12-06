@@ -56,12 +56,12 @@
     <dependency>
       <groupId>com.google.code.gson</groupId>
       <artifactId>gson</artifactId>
-      <version>2.10.1</version>
+      <version>2.11.0</version>
     </dependency>
     <dependency>
 		<groupId>com.github.WeiseSchokolade</groupId>
 		<artifactId>RRSWJ</artifactId>
-		<version>7ccf1b4</version>
+		<version>master-SNAPSHOT</version>
 	</dependency>
 	<dependency>
 		<groupId>com.github.WeiseSchokolade</groupId>
