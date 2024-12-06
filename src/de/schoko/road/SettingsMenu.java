@@ -24,6 +24,7 @@ public class SettingsMenu extends Menu {
 	
 	private TextButton showNamesButton;
 	private TextButton showFramesButton;
+	private TextButton limitFramesButton;
 	private TextButton exitButton;
 	private TextButton arrowControlsButton;
 	
@@ -57,11 +58,11 @@ public class SettingsMenu extends Menu {
 		}
 		
 		PanelSystem panelSystem = context.getPanelSystem();
-		panelSystem.add(new TextInputBox(80, 280, Constants.SERVER_IP, 999, string -> {
+		panelSystem.add(new TextInputBox(80, 330, Constants.SERVER_IP, 999, string -> {
 			Constants.SERVER_IP = string;
 			settingsConfig.set("ip", Constants.SERVER_IP);
 		}));
-		panelSystem.add(new IntInputBox(110, 320, Constants.SERVER_PORT, 1, 65536, i -> {
+		panelSystem.add(new IntInputBox(110, 370, Constants.SERVER_PORT, 1, 65536, i -> {
 			Constants.SERVER_PORT = i;
 			settingsConfig.set("port", String.valueOf(Constants.SERVER_PORT));
 		}));
@@ -72,9 +73,11 @@ public class SettingsMenu extends Menu {
 				Constants.MAIN_MENU_BACKGROUND_COLOR, Constants.MAIN_MENU_BACKGROUND_COLOR, Color.WHITE, Color.LIGHT_GRAY);
 		showFramesButton = new TextButton(context, "Show Frames: " + Constants.SHOW_FRAMES, 30, 230, Color.RED, Constants.MAIN_MENU_FONT,
 				Constants.MAIN_MENU_BACKGROUND_COLOR, Constants.MAIN_MENU_BACKGROUND_COLOR, Color.WHITE, Color.LIGHT_GRAY);
+		limitFramesButton = new TextButton(context, "Limit Frames: " + Constants.SHOW_FRAMES, 30, 280, Color.RED, Constants.MAIN_MENU_FONT,
+				Constants.MAIN_MENU_BACKGROUND_COLOR, Constants.MAIN_MENU_BACKGROUND_COLOR, Color.WHITE, Color.LIGHT_GRAY);
 		exitButton = new TextButton(context, "Close Settings", 30, 0, Color.RED, Constants.MAIN_MENU_FONT,
 				Constants.MAIN_MENU_BACKGROUND_COLOR, Constants.MAIN_MENU_BACKGROUND_COLOR, Color.WHITE, Color.LIGHT_GRAY);
-		arrowControlsButton = new TextButton(context, "Arrow Controls: " + Constants.ARROW_CONTROLS, 30, 355, Color.RED, Constants.MAIN_MENU_FONT,
+		arrowControlsButton = new TextButton(context, "Arrow Controls: " + Constants.ARROW_CONTROLS, 30, 405, Color.RED, Constants.MAIN_MENU_FONT,
 				Constants.MAIN_MENU_BACKGROUND_COLOR, Constants.MAIN_MENU_BACKGROUND_COLOR, Color.WHITE, Color.LIGHT_GRAY);
 	}
 	
@@ -113,6 +116,11 @@ public class SettingsMenu extends Menu {
 			showFramesButton.setText("Show Frames: " + Constants.SHOW_FRAMES);
 			settingsConfig.set("showFrames", String.valueOf(Constants.SHOW_FRAMES));
 		}
+		if (limitFramesButton.wasReleased()) {
+			Constants.LIMIT_FRAMES = !Constants.LIMIT_FRAMES;
+			limitFramesButton.setText("Limit Frames: " + Constants.LIMIT_FRAMES);
+			settingsConfig.set("limitFrames", String.valueOf(Constants.LIMIT_FRAMES));
+		}
 		if (arrowControlsButton.wasReleased()) {
 			Constants.ARROW_CONTROLS = !Constants.ARROW_CONTROLS;
 			arrowControlsButton.setText("Arrow Controls: " + Constants.ARROW_CONTROLS);
@@ -130,12 +138,13 @@ public class SettingsMenu extends Menu {
 		
 		hud.draw(showNamesButton);
 		hud.draw(showFramesButton);
+		hud.draw(limitFramesButton);
 		hud.draw(arrowControlsButton);
 		
 		exitButton.setY((int) (hud.getHeight() - exitButton.getHeight() - 30));
 		hud.draw(exitButton);
 		
-		hud.drawText("IP:", 30, 305, Color.RED, Constants.MAIN_MENU_FONT, TextAlignment.LEFT);
-		hud.drawText("Port:", 30, 345, Color.RED, Constants.MAIN_MENU_FONT, TextAlignment.LEFT);
+		hud.drawText("IP:", 30, 355, Color.RED, Constants.MAIN_MENU_FONT, TextAlignment.LEFT);
+		hud.drawText("Port:", 30, 395, Color.RED, Constants.MAIN_MENU_FONT, TextAlignment.LEFT);
 	}
 }

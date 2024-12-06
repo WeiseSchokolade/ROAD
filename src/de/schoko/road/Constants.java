@@ -28,6 +28,7 @@ public class Constants {
 	public static boolean SHOW_NAMES = true;
 	public static boolean DRAW_ROAD = true;
 	public static boolean SHOW_FRAMES = false;
+	public static boolean LIMIT_FRAMES = false;
 	
 	public static double ROAD_WIDTH = 1.5;
 	public static double ROAD_BOUNDS_WIDTH = 1.4;

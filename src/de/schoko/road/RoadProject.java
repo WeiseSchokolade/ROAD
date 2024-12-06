@@ -99,6 +99,10 @@ public class RoadProject extends Renderer {
 			if (showFrames != null) {
 				Constants.SHOW_FRAMES = Boolean.valueOf(showFrames);
 			}
+			String limitFrames = config.get("limitFrames");
+			if (limitFrames != null) {
+				Constants.LIMIT_FRAMES = Boolean.valueOf(limitFrames);
+			}
 			String ip = config.get("ip");
 			if (ip != null) {
 				Constants.SERVER_IP = ip;
@@ -126,9 +130,9 @@ public class RoadProject extends Renderer {
 	public void render(Graph g, double deltaTimeMS) {
 		changedMenu = false;
 		
-		long currentTime = 0;
+		long currentTime = System.currentTimeMillis();
 		if (Constants.SHOW_FRAMES) {
-			g.addDebugString("currentTimeMillis: " + System.currentTimeMillis());
+			g.addDebugString("currentTimeMillis: " + currentTime);
 			second -= deltaTimeMS;
 			if (second < 0) {
 				second += 1000;
@@ -148,10 +152,12 @@ public class RoadProject extends Renderer {
 			currentTime = System.currentTimeMillis();
 		}
 		
+		long renderTime = System.currentTimeMillis();
 		if (changedMenu) {
 		} else {
 			menu.render(g);
 		}
+		renderTime = System.currentTimeMillis() - renderTime;
 		
 		if (Constants.SHOW_FRAMES) {
 			g.addDebugString("Draw Time: " + (System.currentTimeMillis() - currentTime));
@@ -163,6 +169,17 @@ public class RoadProject extends Renderer {
 			TimeLogger.getKeys().forEach(key -> {
 				g.addDebugString("" + key + " Time: " + TimeLogger.getTime(key));
 			});
+		}
+		if (Constants.LIMIT_FRAMES) {
+			long fps = 120;
+			long sleepTime = 1000 / fps - renderTime;
+			if (sleepTime > 0) {
+				try {
+					Thread.sleep(sleepTime);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 	

@@ -2,6 +2,7 @@ name: Player
 quality: normal
 showNames: true
 showFrames: false
+limitFrames: false
 ip: 127.0.0.1
 port: 5555
 arrowControls: false
